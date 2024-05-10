@@ -1,0 +1,655 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RadioGroup
+                android:id="@+id/radioGroupSAMType"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radioButtonSAMSlot"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="SAM Slot"
+                    tools:ignore="HardcodedText" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonFDEmulator"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="FD Emulator"
+                    tools:ignore="HardcodedText" />
+            </RadioGroup>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Emulator TCP-address:" />
+
+                <EditText
+                    android:id="@+id/editTextEmulatorTCPAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autofillHints=""
+                    android:ems="10"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <Button
+                    android:id="@+id/buttonSetEmulatorAddresses"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Set"
+                    tools:ignore="HardcodedText" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="OFD Server TCP-Addresses:" />
+
+                <EditText
+                    android:id="@+id/editTextServerAddresses"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autofillHints=""
+                    android:ems="10"
+                    android:text=""
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <Button
+                    android:id="@+id/buttonSetServerAddresses"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Set"
+                    tools:ignore="HardcodedText" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/buttonGetVersion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Get Version"
+                tools:ignore="HardcodedText" />
+
+
+            <TextView
+                android:id="@+id/textViewGetVersion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="?" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tags:" />
+
+                <EditText
+                    android:id="@+id/editTextInfoTags"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:text="" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/buttonGetInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Get Info"
+                tools:ignore="HardcodedText" />
+
+            <Button
+                android:id="@+id/buttonStateSyncWithServer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Sync State with Server"
+                tools:ignore="HardcodedText" />
+
+
+            <TextView
+                android:id="@+id/textViewGetInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="?" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tags:" />
+
+                <EditText
+                    android:id="@+id/editTextFiscalMemoryInfoTags"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:text="" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/buttonGetFiscalMemoryInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Get Fiscal Memory Info"
+                tools:ignore="HardcodedText" />
+
+
+            <TextView
+                android:id="@+id/textViewGetFiscalMemoryInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="?" />
+
+            <Button
+                android:id="@+id/buttonGetUnackowledgedZReportsIndexes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Get Unackowledged ZReports Indexes"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/textViewGetUnackowledgedZReportsIndexes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="?" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/buttonSetCurrentTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="Set Current Time"
+                    tools:ignore="HardcodedText" />
+
+                <EditText
+                    android:id="@+id/editTextDateCurrentTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:autofillHints=""
+                    android:ems="10"
+                    android:inputType="date"
+                    tools:ignore="SpeakableTextPresentCheck" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/buttonOpenZReport"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Open ZReport"
+                    tools:ignore="HardcodedText, ButtonStyle" />
+
+                <Button
+                    android:id="@+id/buttonCloseZReport"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Close ZReport"
+                    tools:ignore="HardcodedText, ButtonStyle" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textViewOpenCloseZReport"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="?" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Index:" />
+
+                <EditText
+                    android:id="@+id/editTextNumberSignedZReportIndex"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autofillHints=""
+                    android:ems="10"
+                    android:inputType="numberSigned"
+                    android:text="0"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tags:" />
+
+                <EditText
+                    android:id="@+id/editTextZReportInfoTags"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:text="" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/buttonGetZReportInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Get ZReport Info"
+                tools:ignore="HardcodedText" />
+
+            <Button
+                android:id="@+id/buttonGetZReportFile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Get ZReport File"
+                tools:ignore="HardcodedText" />
+
+            <Button
+                android:id="@+id/buttonSyncZReportFile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sync ZReport File with server"
+                tools:ignore="HardcodedText" />
+
+
+            <TextView
+                android:id="@+id/textViewGetZReportInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="?" />
+
+
+            <RadioGroup
+                android:id="@+id/radioGroupType"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radioButtonPurchase"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="Purchase"
+                    tools:ignore="HardcodedText" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonAdvance"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Advance"
+                    tools:ignore="HardcodedText" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonCredit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Credit"
+                    tools:ignore="HardcodedText" />
+            </RadioGroup>
+
+            <RadioGroup
+                android:id="@+id/radioGroupOperation"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radioButtonSale"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="Sale"
+                    tools:ignore="HardcodedText" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonRefund"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Refund"
+                    tools:ignore="HardcodedText" />
+            </RadioGroup>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Target sum:" />
+
+                <EditText
+                    android:id="@+id/editTextNumberTargetSum"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autofillHints=""
+                    android:ems="10"
+                    android:inputType="number"
+                    android:text="10000000"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/buttonSetCurrentTime2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="Set Current Time"
+                    tools:ignore="HardcodedText" />
+
+                <EditText
+                    android:id="@+id/editTextDateCurrentTime2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:autofillHints=""
+                    android:ems="10"
+                    android:inputType="date"
+                    tools:ignore="SpeakableTextPresentCheck" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/buttonGenerateTestReceipt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Generate Test Receipt"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/textViewGenerateTestReceipt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="?"
+                android:textColor="#757575"
+                tools:ignore="TextContrastCheck" />
+
+            <Button
+                android:id="@+id/buttonGetRegisterTXID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Get Register Receipt TX ID"
+                tools:ignore="HardcodedText" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TX ID:" />
+
+                <EditText
+                    android:id="@+id/editTextNumberTXID"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autofillHints=""
+                    android:ems="10"
+                    android:inputType="number"
+                    android:text=""
+                    tools:ignore="TouchTargetSizeCheck" />
+            </LinearLayout>
+
+
+            <Button
+                android:id="@+id/buttonRegisterReceipt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Register Receipt with TX ID"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/textViewRegisterReceipt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="?" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Index:" />
+
+                <EditText
+                    android:id="@+id/editTextNumberSignedReceiptIndex"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autofillHints=""
+                    android:ems="10"
+                    android:inputType="numberSigned"
+                    android:text="0"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tags:" />
+
+                <EditText
+                    android:id="@+id/editTextReceiptInfoTags"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:text="" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/buttonGetReceiptInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Get Receipt Info"
+                tools:ignore="HardcodedText" />
+
+            <Button
+                android:id="@+id/buttonGetReceiptFile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Get Receipt File"
+                tools:ignore="HardcodedText" />
+
+
+            <TextView
+                android:id="@+id/textViewGetReceiptInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="?" />
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sync items count:" />
+
+                <EditText
+                    android:id="@+id/editTextNumberSyncItemsCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autofillHints=""
+                    android:ems="10"
+                    android:inputType="number"
+                    android:text="10"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+            </LinearLayout>
+
+            <RadioGroup
+                android:id="@+id/radioGroupSyncItemType"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radioButtonSyncAllItems"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="All Items"
+                    tools:ignore="HardcodedText" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonSyncOnlyZReports"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Only ZReports"
+                    tools:ignore="HardcodedText" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonSyncOnlyShortReceipts"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Only Short Receipts"
+                    tools:ignore="HardcodedText" />
+            </RadioGroup>
+
+            <Button
+                android:id="@+id/buttonSyncFiles"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sync Files with server"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/textViewSyncFilesReport"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="?" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Auth challenge hex (16 bytes): 0x" />
+
+                <EditText
+                    android:id="@+id/editTextAuthChallengeHex"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autofillHints=""
+                    android:ems="10"
+                    android:text="00000000000000000000000000000000"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/buttonSignedChallengeAuth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Signed Challenge Auth"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/textViewSignedChallengeAuth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="?" />
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
