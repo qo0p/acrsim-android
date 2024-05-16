@@ -11,11 +11,13 @@ import java.util.Date;
 
 import uz.yt.ofd.acrsim.db.dto.EncryptedFullReceiptFile;
 import uz.yt.ofd.acrsim.db.dto.RegisterReceiptLog;
+import uz.yt.ofd.android.lib.codec.HexBin;
+import uz.yt.ofd.android.lib.crypto.OzDSt1106Digest;
 
 public class SQLiteStorage extends SQLiteOpenHelper implements Storage {
 
     final static String DB_NAME = "storage.db";
-    final static int DB_VERSION = 5;
+    final static int DB_VERSION = 6;
 
 
     // Creating table query
@@ -27,11 +29,13 @@ public class SQLiteStorage extends SQLiteOpenHelper implements Storage {
             "\t\"receipt_type\"\tINTEGER NOT NULL,\n" +
             "\t\"operation\"\tINTEGER NOT NULL,\n" +
             "\t\"tlv_receipt_body\"\tBLOB NOT NULL,\n" +
+            "\t\"tlv_receipt_body_hash\"\tTEXT NOT NULL,\n" +
             "\t\"total_block\"\tBLOB NOT NULL,\n" +
             "\t\"error\"\tTEXT,\n" +
             "\t\"fiscal_sign_info\"\tBLOB,\n" +
             "\t\"terminal_id\"\tTEXT,\n" +
             "\t\"receipt_seq\"\tINTEGER,\n" +
+            "\t\"status\"\tINTEGER NOT NULL DEFAULT 0,\n" +
             "\tPRIMARY KEY(\"id\" AUTOINCREMENT)\n" +
             ")";
 
@@ -75,7 +79,20 @@ public class SQLiteStorage extends SQLiteOpenHelper implements Storage {
     @Override
     public Long newReceiptRegisterLog(String factoryID, byte receiptVersion, byte receiptType, byte operation, byte[] tlvEncodedReceiptRaw, byte[] totalBlockRaw) throws Exception {
         Long id = null;
+        String hv = hash(tlvEncodedReceiptRaw);
         try {
+            {
+                SQLiteDatabase rdb = getReadableDatabase();
+                Cursor cursor = rdb.query("receipt_register_log", new String[]{"id"}, "factory_id=? and receipt_version=? and receipt_type=? and operation=? and tlv_receipt_body_hash=?", new String[]{factoryID, String.valueOf(receiptVersion), String.valueOf(receiptType), String.valueOf(operation), hv}, null, null, null);
+                try {
+                    if (cursor.moveToNext()) {
+                        id = cursor.getLong(cursor.getColumnIndexOrThrow("id"));
+                        return id;
+                    }
+                } finally {
+                    cursor.close();
+                }
+            }
             {
                 SQLiteDatabase wdb = getWritableDatabase();
                 ContentValues values = new ContentValues();
@@ -84,6 +101,7 @@ public class SQLiteStorage extends SQLiteOpenHelper implements Storage {
                 values.put("receipt_type", receiptType);
                 values.put("operation", operation);
                 values.put("tlv_receipt_body", tlvEncodedReceiptRaw);
+                values.put("tlv_receipt_body_hash", hv);
                 values.put("total_block", totalBlockRaw);
 
                 wdb.insert("receipt_register_log", null, values);
@@ -135,12 +153,11 @@ public class SQLiteStorage extends SQLiteOpenHelper implements Storage {
         try {
             SQLiteDatabase wdb = getWritableDatabase();
             ContentValues values = new ContentValues();
-            values.put("factory_id", factoryID);
             values.put("fiscal_sign_info", fiscalSignRaw);
             values.put("terminal_id", terminalID);
             values.put("receipt_seq", receiptSeq);
 
-            wdb.update("receipt_register_log", values, "id = ?", new String[]{String.valueOf(id)});
+            wdb.update("receipt_register_log", values, "id = ? and factory_id = ?", new String[]{String.valueOf(id), factoryID});
         } catch (Throwable t) {
             throw t;
         }
@@ -164,19 +181,33 @@ public class SQLiteStorage extends SQLiteOpenHelper implements Storage {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             SQLiteDatabase wdb = getWritableDatabase();
-            ContentValues values = new ContentValues();
-            values.put("factory_id", factoryID);
-            values.put("terminal_id", terminalID);
-            values.put("receipt_seq", receiptSeq);
-            values.put("time", sdf.format(time));
-            values.put("receipt_version", receiptVersion);
-            values.put("receipt_type", receiptType);
-            values.put("operation", operation);
-            values.put("file", file);
-            values.put("id", id);
-            values.put("status", 0);
+            wdb.beginTransaction();
+            try {
+                {
+                    ContentValues values = new ContentValues();
+                    values.put("factory_id", factoryID);
+                    values.put("terminal_id", terminalID);
+                    values.put("receipt_seq", receiptSeq);
+                    values.put("time", sdf.format(time));
+                    values.put("receipt_version", receiptVersion);
+                    values.put("receipt_type", receiptType);
+                    values.put("operation", operation);
+                    values.put("file", file);
+                    values.put("id", id);
+                    values.put("status", 0);
 
-            wdb.insert("full_receipt", null, values);
+                    wdb.insert("full_receipt", null, values);
+                }
+                {
+                    ContentValues values = new ContentValues();
+                    values.put("status", 1);
+
+                    wdb.update("receipt_register_log", values, "id = ? and factory_id = ?", new String[]{String.valueOf(id), factoryID});
+                }
+                wdb.setTransactionSuccessful();
+            }finally {
+                wdb.endTransaction();
+            }
         } catch (Throwable t) {
             throw t;
         }
@@ -201,5 +232,13 @@ public class SQLiteStorage extends SQLiteOpenHelper implements Storage {
         } catch (Throwable t) {
             throw t;
         }
+    }
+
+    private String hash(byte[] data) {
+        OzDSt1106Digest digest = new OzDSt1106Digest();
+        digest.update(data, 0, data.length);
+        byte[] h = new byte[digest.getDigestSize()];
+        digest.doFinal(h, 0);
+        return HexBin.encode(h);
     }
 }

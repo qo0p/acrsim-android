@@ -477,6 +477,13 @@ public class MainActivity extends AppCompatActivity {
                     public void run(APDUIO apduio, byte[] CPLC) throws Exception {
                         String factoryID = HexBin.encode(CPLC);
 
+                        FiscalMemoryInfoDecoder decoder = new GetFiscalMemoryInfoCommand(new byte[]{FiscalMemoryInfo.TAG_LAST_OPERATION_TIME}).run(apduio, FiscalMemoryInfoDecoder.class);
+                        FiscalMemoryInfo info = decoder.decode();
+
+                        if (info.getLastOperationTime().after(receipt.getTime())||info.getLastOperationTime().equals(receipt.getTime())) {
+                            throw new IllegalArgumentException("receipt time is in the past");
+                        }
+
                         Storage storage = App.getStorage();
 
                         ByteArrayOutputStream tlvEncodedReceipt = new ByteArrayOutputStream();

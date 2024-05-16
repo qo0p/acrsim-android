@@ -36,7 +36,7 @@ public class ReceiptInfo extends TLVEncodable {
     public static final byte TAG_RECEIVED_CARD = (byte) 0x08;
     public static final byte TAG_TOTAL_VAT = (byte) 0x09;
     public static final byte TAG_ITEMS_COUNT = (byte) 0x0a;
-    public static final byte TAG_FISCAL_CIPHER_KEY = (byte) 0x0c;
+    public static final byte TAG_CIPHER_KEY = (byte) 0x0c;
     public static final byte TAG_EXTRA = (byte) 0x0e;
     public static final byte TAG_ITEMS_HASH = (byte) 0x0f;
 
@@ -45,7 +45,7 @@ public class ReceiptInfo extends TLVEncodable {
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_RECEIPT_SEQ, "ReceiptSeq"));
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_TIME, "Time"));
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_FISCAL_SIGN, "FiscalSign"));
-        parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_FISCAL_CIPHER_KEY, "CipherKey"));
+        parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_CIPHER_KEY, "CipherKey"));
 
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_ITEMS_HASH, "ItemsHash"));
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_ITEMS_COUNT, "ItemsCount"));
@@ -104,7 +104,7 @@ public class ReceiptInfo extends TLVEncodable {
             writeShort(TAG_ITEMS_COUNT, itemsCount, w);
         }
         if (cipherKey != null) {
-            w.write(TLV.encode(TAG_FISCAL_CIPHER_KEY, cipherKey));
+            w.write(TLV.encode(TAG_CIPHER_KEY, cipherKey));
         }
         if (extra != null && extra.length > 0) {
             w.write(TLV.encode(TAG_EXTRA, extra));
@@ -261,7 +261,7 @@ public class ReceiptInfo extends TLVEncodable {
                     }
                 });
             }
-            if (tv.getTag() == TAG_FISCAL_CIPHER_KEY) {
+            if (tv.getTag() == TAG_CIPHER_KEY) {
                 str.read(tv, new SingleTagReader.Callback() {
                     @Override
                     public boolean assign(TV tv) throws Exception {
