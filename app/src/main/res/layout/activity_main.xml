@@ -649,6 +649,56 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="?" />
+
+            <Switch
+                android:id="@+id/switchUsePOSLock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Use POS Lock" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="POS secret (32 bytes): 0x" />
+
+                <EditText
+                    android:id="@+id/editTextPOSSecretHex"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autofillHints=""
+                    android:ems="10"
+                    android:text="0000000000000000000000000000000000000000000000000000000000000001"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/buttonPOSLock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Lock with POS secret"
+                tools:ignore="HardcodedText" />
+
+            <Button
+                android:id="@+id/buttonPOSAuth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Auth with POS secret"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/textViewPOSLock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="?" />
+
         </LinearLayout>
     </ScrollView>
 

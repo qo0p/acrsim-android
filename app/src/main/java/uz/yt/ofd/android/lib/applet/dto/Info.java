@@ -27,6 +27,8 @@ public class Info extends TLVEncodable {
     public static final byte TAG_LOCKED = (byte) 0x05;
     public static final byte TAG_JCRE_VERSION = (byte) 0x06;
     public static final byte TAG_MODE = (byte) 0x07;
+    public static final byte TAG_POS_LOCKED = (byte) 0x08;
+    public static final byte TAG_POS_AUTH = (byte) 0x09;
     public static final byte TAG_MEMORY = (byte) 0x80;
 
     public static void buildTlvTagDescriptions(TlvTagDescriptions parentTlvTagDescriptions, TlvTagDescriptions.OID oid) {
@@ -37,6 +39,8 @@ public class Info extends TLVEncodable {
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_LOCKED, "Locked"));
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_JCRE_VERSION, "JCREVersion"));
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_MODE, "Mode"));
+        parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_POS_LOCKED, "POSLocked"));
+        parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_POS_AUTH, "POSAuth"));
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_MEMORY, "MemoryInfo"));
         MemoryInfo.buildTlvTagDescriptions(parentTlvTagDescriptions, oid.append(TAG_MEMORY, "MemoryInfo"));
     }
@@ -48,6 +52,8 @@ public class Info extends TLVEncodable {
     private Boolean locked;
     private String jcreVersion;
     private Byte mode;
+    private Boolean posLocked;
+    private Boolean posAuth;
     private MemoryInfo memoryInfo;
 
 
@@ -73,6 +79,12 @@ public class Info extends TLVEncodable {
         }
         if (mode != null) {
             w.write(TLV.encode(TAG_MODE, new byte[]{mode}));
+        }
+        if (posLocked != null) {
+            w.write(TLV.encode(TAG_POS_LOCKED, new byte[]{posLocked ? (byte) 0x00 : (byte) 0xff}));
+        }
+        if (posAuth != null) {
+            w.write(TLV.encode(TAG_POS_AUTH, new byte[]{posAuth ? (byte) 0x00 : (byte) 0xff}));
         }
         if (memoryInfo != null) {
             w.write(TLV.encode(TAG_MEMORY, memoryInfo.encode()));
@@ -166,6 +178,32 @@ public class Info extends TLVEncodable {
                     }
                 });
             }
+            if (tv.getTag() == TAG_POS_LOCKED) {
+                str.read(tv, new SingleTagReader.Callback() {
+                    @Override
+                    public boolean assign(TV tv) throws Exception {
+                        if (tv.getValue() != null && tv.getValue().length == 1) {
+                            o.posLocked = tv.getValue()[0] == 0x00;
+                        } else {
+                            throw new IllegalArgumentException(String.format("posLocked must be %d bytes long", 1));
+                        }
+                        return true;
+                    }
+                });
+            }
+            if (tv.getTag() == TAG_POS_AUTH) {
+                str.read(tv, new SingleTagReader.Callback() {
+                    @Override
+                    public boolean assign(TV tv) throws Exception {
+                        if (tv.getValue() != null && tv.getValue().length == 1) {
+                            o.posAuth = tv.getValue()[0] == 0x00;
+                        } else {
+                            throw new IllegalArgumentException(String.format("posAuth must be %d bytes long", 1));
+                        }
+                        return true;
+                    }
+                });
+            }
             if (tv.getTag() == TAG_MEMORY) {
                 str.read(tv, new SingleTagReader.Callback() {
                     @Override
@@ -217,6 +255,22 @@ public class Info extends TLVEncodable {
 
     public void setLocked(Boolean locked) {
         this.locked = locked;
+    }
+
+    public Boolean getPosAuth() {
+        return posAuth;
+    }
+
+    public void setPosAuth(Boolean posAuth) {
+        this.posAuth = posAuth;
+    }
+
+    public Boolean getPosLocked() {
+        return posLocked;
+    }
+
+    public void setPosLocked(Boolean posLocked) {
+        this.posLocked = posLocked;
     }
 
     public MemoryInfo getMemoryInfo() {

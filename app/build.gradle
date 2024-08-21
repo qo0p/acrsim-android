@@ -28,6 +28,7 @@ android {
     buildFeatures {
         viewBinding true
     }
+    namespace 'uz.yt.ofd.acrsim'
 }
 
 dependencies {

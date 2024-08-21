@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -46,6 +47,9 @@ import uz.yt.ofd.android.lib.applet.command.GetVersionCommand;
 import uz.yt.ofd.android.lib.applet.command.GetZReportFileCommand;
 import uz.yt.ofd.android.lib.applet.command.GetZReportInfoCommand;
 import uz.yt.ofd.android.lib.applet.command.OpenCloseZReportCommand;
+import uz.yt.ofd.android.lib.applet.command.POSAuthCommand;
+import uz.yt.ofd.android.lib.applet.command.POSChallengeCommand;
+import uz.yt.ofd.android.lib.applet.command.POSLockCommand;
 import uz.yt.ofd.android.lib.applet.command.RegisterReceiptCommand;
 import uz.yt.ofd.android.lib.applet.command.SignedChallengeAuthCommand;
 import uz.yt.ofd.android.lib.applet.command.SyncCommand;
@@ -178,6 +182,9 @@ public class MainActivity extends AppCompatActivity {
         final EditText editTextEmulatorTCPAddress = findViewById(R.id.editTextEmulatorTCPAddress);
 
         editTextEmulatorTCPAddress.setText(App.config.getProperty("fiscal.drive.emulator.address"));
+
+        final Switch switchUsePOSLock = findViewById(R.id.switchUsePOSLock);
+        final EditText editTextPOSSecretHex = findViewById(R.id.editTextPOSSecretHex);
 
         buttonSetEmulatorAddresses.setOnClickListener(view -> {
             try {
@@ -347,6 +354,9 @@ public class MainActivity extends AppCompatActivity {
             runCardCommand(new Callback() {
                 @Override
                 public void run(APDUIO apduio, byte[] CPLC) throws Exception {
+                    if (switchUsePOSLock.isChecked()) {
+                        posAuth(apduio, editTextPOSSecretHex.getText().toString());
+                    }
                     Date time = dateFormat.parse(editTextDateCurrentTime.getText().toString());
                     new OpenCloseZReportCommand(true, time).run(apduio, VoidDecoder.class);
                     setText(textViewOpenCloseZReport, "OK");
@@ -361,6 +371,9 @@ public class MainActivity extends AppCompatActivity {
             runCardCommand(new Callback() {
                 @Override
                 public void run(APDUIO apduio, byte[] CPLC) throws Exception {
+                    if (switchUsePOSLock.isChecked()) {
+                        posAuth(apduio, editTextPOSSecretHex.getText().toString());
+                    }
                     Date time = dateFormat.parse(editTextDateCurrentTime.getText().toString());
                     new OpenCloseZReportCommand(false, time).run(apduio, VoidDecoder.class);
                     setText(textViewOpenCloseZReport, "OK");
@@ -480,7 +493,7 @@ public class MainActivity extends AppCompatActivity {
                         FiscalMemoryInfoDecoder decoder = new GetFiscalMemoryInfoCommand(new byte[]{FiscalMemoryInfo.TAG_LAST_OPERATION_TIME}).run(apduio, FiscalMemoryInfoDecoder.class);
                         FiscalMemoryInfo info = decoder.decode();
 
-                        if (info.getLastOperationTime().after(receipt.getTime())||info.getLastOperationTime().equals(receipt.getTime())) {
+                        if (info.getLastOperationTime().after(receipt.getTime()) || info.getLastOperationTime().equals(receipt.getTime())) {
                             throw new IllegalArgumentException("receipt time is in the past");
                         }
 
@@ -540,6 +553,10 @@ public class MainActivity extends AppCompatActivity {
 
                     byte[] totoalBlock = rrl.getTotalBlockRaw();
 
+
+                    if (switchUsePOSLock.isChecked()) {
+                        posAuth(apduio, editTextPOSSecretHex.getText().toString());
+                    }
 
                     FiscalSignInfoDecoder decoder;
                     FiscalSignInfo info;
@@ -754,6 +771,45 @@ public class MainActivity extends AppCompatActivity {
             });
         });
 
+        Button buttonPOSLock = findViewById(R.id.buttonPOSLock);
+        TextView textViewPOSLock = findViewById(R.id.textViewPOSLock);
+
+        buttonPOSLock.setOnClickListener(view -> {
+            setText(textViewPOSLock, "?");
+            runCardCommand(new Callback() {
+                @Override
+                public void run(APDUIO apduio, byte[] CPLC) throws Exception {
+                    byte[] secret = HexBin.decode(editTextPOSSecretHex.getText().toString());
+                    if (secret.length != 32) {
+                        throw new IllegalArgumentException("POS secret length is not 32 bytes");
+                    }
+                    MessageDigest digest = MessageDigest.getInstance("SHA-256");
+                    byte[] secretHash = digest.digest(secret);
+                    new POSLockCommand(Utils.append(secret, secretHash)).run(apduio, VoidDecoder.class);
+
+                    setText(textViewPOSLock, "OK");
+
+                }
+            });
+        });
+
+        Button buttonPOSAuth = findViewById(R.id.buttonPOSAuth);
+
+        buttonPOSAuth.setOnClickListener(view -> {
+            setText(textViewPOSLock, "?");
+            runCardCommand(new Callback() {
+                @Override
+                public void run(APDUIO apduio, byte[] CPLC) throws Exception {
+
+                    posAuth(apduio, editTextPOSSecretHex.getText().toString());
+
+                    byte[] tags = new byte[]{Info.TAG_POS_LOCKED, Info.TAG_POS_AUTH};
+                    InfoDecoder decoder = new GetInfoCommand(tags).run(apduio, InfoDecoder.class);
+                    Info info = decoder.decode();
+                    setText(textViewPOSLock, App.getGson().toJson(info));
+                }
+            });
+        });
 
     }
 
@@ -836,5 +892,14 @@ public class MainActivity extends AppCompatActivity {
         alert("Sync", "Acknowledged Items Total: " + syncItems.size() + " Successful: " + successfulAckCount + " Failed: " + unsuccessfulAckCount);
     }
 
+    void posAuth(APDUIO apduio, String posSecretHex) throws Exception {
+        byte[] secret = HexBin.decode(posSecretHex);
+        ByteArrayDecoder decoder = new POSChallengeCommand().run(apduio, ByteArrayDecoder.class);
+        byte[] posChallenge = decoder.getData();
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        digest.update(secret);
+        byte[] auth = digest.digest(posChallenge);
+        new POSAuthCommand(auth).run(apduio, VoidDecoder.class);
+    }
 
 }

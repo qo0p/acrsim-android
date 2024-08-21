@@ -27,6 +27,12 @@ public interface Instruction {
 
 
     byte INS_SIGNED_CHALLENGE_AUTH = (byte) 0x0b;
+
+    byte INS_POS = (byte) 0x0c;
+    byte P1_POS_LOCK = (byte) 0x00;
+    byte P1_POS_CHALLENGE = (byte) 0x01;
+    byte P1_POS_AUTH = (byte) 0x02;
+
     byte INS_SYNC = (byte) 0x11;
 
     byte[] GET_VERSION = {INS_GET_INFO, INS_GET_INFO_P1_GET_VERSION, 0x00};
@@ -42,6 +48,10 @@ public interface Instruction {
 
     byte[] ACK = {INS_ACK, 0x00, 0x00};
 
+
+    byte[] POS_LOCK = {INS_POS, P1_POS_LOCK, 0x00};
+    byte[] POS_CHALLENGE = {INS_POS, P1_POS_CHALLENGE, 0x00};
+    byte[] POS_AUTH = {INS_POS, P1_POS_AUTH, 0x00};
 
 }
 
