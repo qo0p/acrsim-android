@@ -83,3 +83,149 @@
 
 _Другие коды возвращаются OC смарт-карты. См._  [Complete list of APDU responses](https://www.eftlab.com/knowledge-base/complete-list-of-apdu-responses)
 
+## Описание ACR-SIM
+
+### Подключение к SAM-слоту и серверу ОФД
+
+![](img/0.png)
+
+Для работы с ФМ подключенному к SAM-слоту ККМ выберите опцию `SAM Slot`, но перед этим вам нужно реализовать метод `getSamSlot` класса `uz.yt.ofd.acrsim.driver.SAMSlotProvider`, реализовать интерфейс `uz.yt.ofd.acrsim.SAMSlot` применяя библиотеки вашего ККМ для работы с SAM-слотом.
+
+```
+    public static SAMSlot getSamSlot(int slotNumber) {
+        // TODO: IMPLEMENT CLASS uz.yt.ofd.acrsim.driver.SAMSlotProvider ACCORDING TO YOUR DEVICE'S SPECIFICATION
+        throw new UnsupportedOperationException("IMPLEMENT CLASS uz.yt.ofd.acrsim.driver.SAMSlotProvider ACCORDING TO YOUR DEVICE'S SPECIFICATION");
+    }
+```
+
+Для разработки и тестирования можно использовать эмулятор ФМ, для этого выберите опцию `FD Emulator`. Введте в поле `Emulator TCP-address` IP-адрес и TCP-порт эмулятора и нажмите кнопку `SET`. При этом ККМ и компьютер (разработчика) где запущен эмулятор должны быть подключены к одной сети (Wi-Fi).
+
+Для запуска эмулятора и тестового сервера ОФД нужно ПО FiscalDriveService установленное на компьютере разработчика.
+
+Для запуска эмулятор ФМ введите команду:
+
+```
+fiscal-drive-service devtool fiscal-drive-emulator
+```
+
+В поле `OFD Server TCP-Addresses` введите IP-адрес и TCP-порт тестового сервера ОФД и нажмите кнопку `SET`, если адресов несколько, разделите их запятой.
+
+Для запуска тестового сервера ОФД введите команду:
+
+```
+fiscal-drive-service devtool test-server
+```
+
+### Получение информации об ФМ
+
+![](img/1.png)
+
+- `GET VERSION` - Получить номер версии ФМ
+- `GET INFO` - Получить информацию об ФМ. В поле `Tags` можно указать TLV-теги нужных вам полей:
+    - `TAG_VERSION` = 0x01 - Версия ФМ
+    - `TAG_CPLC` = 0x02 - Заводской номер ФМ
+    - `TAG_TERMINAL_ID` = 0x03 - Серийный номер ФМ
+    - `TAG_SYNC_CHALLENGE` = 0x04 - Challenge для синхронизации с сервером ОФД
+    - `TAG_LOCKED` = 0x05 - ФМ блокирован или нет
+    - `TAG_JCRE_VERSION` = 0x06 - Версия JCRE
+    - `TAG_MODE` = 0x07 - Режим работы, тест или продакшн
+    - `TAG_POS_LOCKED` = 0x08 - ФМ привязан к ККМ или нет
+    - `TAG_POS_AUTH` = 0x09 - ФМ аутентифицировал ККМ
+    - `TAG_MEMORY` = 0x80 - Информация о доступной памяти ФМ
+- `SYNC STATE WITH SERVER` - Синхронизировать состояния ФМ с сервером ОФД. Для установки серверного времени, разблокировки и др.
+- `GET FISCAL MEMORY INFO` - Получить информацию о фискальной памяти. В поле `Tags` можно указать TLV-теги нужных вам полей:
+    - `TAG_TERMINAL_ID` = 0x01 - Серийный номер ФМ
+    - `TAG_RECEIPT_SEQ` = 0x02 - Текущий номер чека
+    - `TAG_LAST_OPERATION_TIME` = 0x03 - Дата-время последней операции
+    - `TAG_FIRST_UNACKNOWLEDGED_RECEIPT_TIME` = 0x04 - Дата-время первого неотправленного на сервер чека
+    - `TAG_ZREPORTS_COUNT` = 0x05 - Кол-во ZReport
+    - `TAG_RECEIPTS_COUNT` = 0x06 - Кол-во неотправленных Receipt
+    - `TAG_CASH_ACCUMULATOR` = 0x80 - Общая сумма наличности продажа/возврат
+    - `TAG_CARD_ACCUMULATOR` = 0x81 - Общая сумма безналичности продажа/возврат
+    - `TAG_VAT_ACCUMULATOR` = 0x82 - Общая сумма НДС продажа/возврат
+- `GET UNACKNOWLEDGED ZREPORTS INDEXES` - Индексы неотправленных на сервер `ZReport`
+
+
+### Работа с ZReport
+
+![](img/2.png)
+
+- `SET CURRENT TIME` - Записать в поле ввода текущюю дату-время
+- `OPEN ZREPORT` - Открыть ZReport с датой-временем из поля ввода
+- `CLOSE ZREPORT` - Закрыть ZReport с датой-временем из поля ввода
+- `GET ZREPORT INFO` - Получить информацию о ZReport по индексу в поле `Index` (_0_ - текущий, _1_ - предыдущий, ...). В поле `Tags` можно указать TLV-теги нужных вам полей:
+    - `TAG_TERMINAL_ID` = 0x01 - Серийный номер ФМ
+    - `TAG_OPEN_TIME` = 0x02 - Дата-время открытия ZReport
+    - `TAG_CLOSE_TIME` = 0x03 - Дата-время закрытия ZReport
+    - `TAG_TOTAL_SALE_COUNT` = 0x04 - Кол-во операций продажа
+    - `TAG_TOTAL_REFUND_COUNT` = 0x05 - Кол-во операций возврат
+    - `TAG_LAST_RECEIPT_SEQ` = 0x06 - Последний номер чека
+    - `TAG_ACKNOWLEDGED_TIME` = 0x07 - Дата-время отправки ZReport на сервер ОФД
+    - `TAG_FIRST_RECEIPT_SEQ` = 0x08 - Первый номер чека
+    - `TAG_TOTAL_CASH` = 0x80 - Общая сумма наличности продажа/возврат
+    - `TAG_TOTAL_CARD` = 0x81 - Общая сумма безналичности продажа/возврат
+    - `TAG_TOTAL_VAT` = 0x82 - Общая сумма НДС продажа/возврат
+- `GET ZREPORT FILE` - Получить информацию о ZReportFile по индексу в поле `Index` (_0_ - текущий, _1_ - предыдущий, ...)
+- `SYNC ZREPORT FILE WITH SERVER` - Отправить ZReportFile (по индексу в поле `Index`) на сервер ОФД.
+
+
+### Работа с Receipt
+
+![](img/3.png)
+
+Выберите тип чека:
+- `Purchase` - Чек покупки
+- `Advance` - Авансовый чек
+- `Credit` - Кредитный чек
+
+Выберите операцию:
+- `Sale` - Продажа
+- `Refund` - Возврат
+
+`Target sum` - целевая сумма тестового чека
+
+- `SET CURRENT TIME` - Записать в поле ввода текущюю дату-время
+- `GENERATE TEST RECEIPT` - Сгенерировать тестовый JSON-чек с целевой суммой
+- `GET REGISTERED RECEIPT TX ID` - Записать тестовый JSON-чек в БД и получить идентифиактор чека
+- `REGISTER RECEIPT WITH TX ID` - Зарегистрировать сумму тестового чека из БД (по идентифиактор чека в поле `TX ID`) в ФМ и получить ФП. Эту операцию можно выполнять повторно если по техническим причинам произойдет обрыв связи с ФМ, будет возвращен один и тот же ФП для данного чека.
+- `GET RECEIPT INFO` - Получить информацию о Receipt по индексу в поле `Index` (_0_ - последний, _1_ - раний, ...). В поле `Tags` можно указать TLV-теги нужных вам полей:
+    - `TAG_TERMINAL_ID` = 0x01 - Серийный номер ФМ
+    - `TAG_RECEIPT_SEQ` = 0x02 - Номер чека
+    - `TAG_TIME` = 0x03 - Дата-время чека
+    - `TAG_FISCAL_SIGN` = 0x04 - ФП чека
+    - `TAG_TYPE` = 0x05 - Тип чека
+    - `TAG_OPERATION` = 0x06 - Операция
+    - `TAG_RECEIVED_CASH` = 0x07 - Сумма наличности
+    - `TAG_RECEIVED_CARD` = 0x08 - Сумма безналичности
+    - `TAG_TOTAL_VAT` = 0x09 - Сумма НДС
+    - `TAG_ITEMS_COUNT` = 0x0a - Кол-во товаров услуг в теле чека
+    - `TAG_EXTRA` = 0x0e - Доп. поля
+    - `TAG_ITEMS_HASH` = 0x0f - Хеш-значение тела чека
+- `GET RECEIPT FILE` - Получить информацию о ReceiptFile по индексу в поле `Index` (_0_ - последний, _1_ - раний, ...)
+
+
+### Отправка файлов на сервер ОФД
+
+![](img/4.png)
+
+Выберите тип отправляемых файлов:
+- `All Items` - ReceiptFile и тело чека, ZReportFile
+- `Only ZReports` - только ZReportFile
+- `Only Short Receipts` - только ReceiptFile, **только в случае если тело чека было утеряно, стерта БД !**
+
+- `SYNC FILES WITH SERVER` - Отправить ReceiptFile и тело чека, ZReportFile на сервер ОФД в количестве не более `Sync Items count` за одну операцию, получить в ответ AckFile и передать в ФМ.
+
+### Аутентификации по ФМ
+
+![](img/5.png)
+
+Для аутентификации по ФМ на сайте (или API) который поддерживает данную функцию, API сайта возвращает Challenge который передается в ФМ, ФМ возвращает подписанный ответ. Подписанный ответ следует отправить на API сайта для верификации и получения Access-Token. Далее по Access-Token вызывает закрытые методы API сайта.
+
+### Привязка ФМ к ККМ
+
+![](img/6.png)
+
+Привязка ФМ к ККМ нужна для защиты от постороннего использования ФМ другими ККМ, например ФМ могут вынуть из ККМ одного ЦТО и установить в ККМ другого ЦТО (без переоформления и уведомления) и использовать.
+
+Для привязки, каждое ЦТО генерирует свой секретный ключ 32-байт и устанавливает этот ключ в ФМ а также с свое ПО в защищенную память ККМ.
+После привязки перед тем как ПО ККМ выполнить операцию открытии/закрытии ZReport или регистрации чека ФМ, ПО ККМ запрашивает POSChallenge из ФМ, выполняет операцию `POSAuth = SHA-256(секретный ключ + POSChallenge)` отпарвляет POSAuth в ФМ и только потом следом выполняет операцию открытии/закрытии ZReport или регистрации чека ФМ. Если секретный ключ не совпадет то ФМ не даст выполнить операцию.
