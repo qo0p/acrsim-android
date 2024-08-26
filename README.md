@@ -108,6 +108,8 @@ _Другие коды возвращаются OC смарт-карты. См._
 fiscal-drive-service devtool fiscal-drive-emulator
 ```
 
+> см. https://github.com/qo0p/fiscal-drive-service
+
 В поле `OFD Server TCP-Addresses` введите IP-адрес и TCP-порт тестового сервера ОФД и нажмите кнопку `SET`, если адресов несколько, разделите их запятой.
 
 Для запуска тестового сервера ОФД введите команду:
@@ -115,6 +117,8 @@ fiscal-drive-service devtool fiscal-drive-emulator
 ```
 fiscal-drive-service devtool test-server
 ```
+
+> см. https://github.com/qo0p/fiscal-drive-service
 
 ### Получение информации об ФМ
 
