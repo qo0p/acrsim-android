@@ -91,7 +91,7 @@ _Другие коды возвращаются OC смарт-карты. См._
 
 Для работы с ФМ подключенному к SAM-слоту ККМ выберите опцию `SAM Slot`, но перед этим вам нужно реализовать метод `getSamSlot` класса `uz.yt.ofd.acrsim.driver.SAMSlotProvider`, реализовать интерфейс `uz.yt.ofd.acrsim.SAMSlot` применяя библиотеки вашего ККМ для работы с SAM-слотом.
 
-```
+```java
     public static SAMSlot getSamSlot(int slotNumber) {
         // TODO: IMPLEMENT CLASS uz.yt.ofd.acrsim.driver.SAMSlotProvider ACCORDING TO YOUR DEVICE'S SPECIFICATION
         throw new UnsupportedOperationException("IMPLEMENT CLASS uz.yt.ofd.acrsim.driver.SAMSlotProvider ACCORDING TO YOUR DEVICE'S SPECIFICATION");
