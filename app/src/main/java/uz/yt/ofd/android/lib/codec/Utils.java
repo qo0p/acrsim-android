@@ -9,6 +9,21 @@ public class Utils {
         return tmp;
     }
 
+    public static byte[] append(byte[] a, byte[]... ba) {
+        int baSize = 0;
+        for (byte[] b : ba) {
+            baSize += b.length;
+        }
+        byte[] tmp = new byte[a.length + baSize];
+        System.arraycopy(a, 0, tmp, 0, a.length);
+        int ofs = a.length;
+        for (byte[] b : ba) {
+            System.arraycopy(b, 0, tmp, ofs, b.length);
+            ofs += b.length;
+        }
+        return tmp;
+    }
+
     public static String[] append(String[] a, String... b) {
         String[] tmp = new String[a.length + b.length];
         System.arraycopy(a, 0, tmp, 0, a.length);
