@@ -483,7 +483,7 @@ public class MainActivity extends AppCompatActivity {
             setText(editTextNumberTXID, "?");
             try {
                 String receiptJson = textViewGenerateTestReceipt.getText().toString();
-                Receipt receipt = App.getGson().fromJson(receiptJson, Receipt.class);
+                final Receipt receipt = App.getGson().fromJson(receiptJson, Receipt.class);
 
                 runCardCommand(new Callback() {
                     @Override
@@ -504,10 +504,10 @@ public class MainActivity extends AppCompatActivity {
                         ReceiptCodec.encode(receipt, tlvEncodedReceipt, totalBlock, new FiscalSignValidator() {
                             @Override
                             public boolean check(String terminalID, byte[] receiptSeqRaw, byte[] dateTimeRaw, byte[] fiscalSignRaw) throws IOException {
-                                // TODO: check online before refund
-                                // return App.getSender().check(terminalID, receiptSeqRaw, dateTimeRaw, fiscalSignRaw);
-
-                                // TODO: remove this on prod app
+                                if (receipt.getType().equals(ReceiptType.Purchase)) {
+                                    // TODO: check online before refund
+                                    // return App.getSender().check(terminalID, receiptSeqRaw, dateTimeRaw, fiscalSignRaw);
+                                }
                                 return true;
                             }
                         });

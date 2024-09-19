@@ -38,6 +38,7 @@ public enum SW {
     DATETIME_SYNC_WITH_SERVER((short) 0x9091),
     ALREADY_POS_LOCKED((short)  0x9092),
     POS_AUTH_FAIL((short)  0x9093),
+    NOT_ENOUGH_MEMORY((short)  0x90FF),
 
     BYTES_REMAINING_00((short) 24832),
     WRONG_LENGTH((short) 26368),

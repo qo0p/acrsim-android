@@ -190,7 +190,7 @@ public class ReceiptUtils {
         extraInfo.setPptid(String.valueOf((short) (Math.abs(random.nextInt()) % 100)));
 
         RefundInfo refundInfo = null;
-        if (type == ReceiptType.Purchase && operation == OperationType.Refund) {
+        if (operation == OperationType.Refund) {
             String terminalID = "ZZ000000000000";
             String receiptSeq = "1";
             String dateTime = "20240101090405";
