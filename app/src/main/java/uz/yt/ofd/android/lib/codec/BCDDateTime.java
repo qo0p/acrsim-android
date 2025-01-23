@@ -63,6 +63,7 @@ public class BCDDateTime {
         cal.set(Calendar.HOUR_OF_DAY, (int) hour);
         cal.set(Calendar.MINUTE, (int) min);
         cal.set(Calendar.SECOND, (int) sec);
+        cal.set(Calendar.MILLISECOND, 0);
         return cal.getTime();
     }
 
