@@ -28,7 +28,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import uz.yt.ofd.acrsim.db.Storage;
 import uz.yt.ofd.acrsim.db.dto.EncryptedFullReceiptFile;
 import uz.yt.ofd.acrsim.db.dto.RegisterReceiptLog;
-import uz.yt.ofd.acrsim.dev.DumpXReportCommand;
 import uz.yt.ofd.acrsim.develop.FiscalDriveEmulator;
 import uz.yt.ofd.acrsim.sender.dto.ReceiptSyncItem;
 import uz.yt.ofd.acrsim.sender.dto.SyncItem;
