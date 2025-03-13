@@ -179,7 +179,6 @@
                 android:text="Get Fiscal Memory Info"
                 tools:ignore="HardcodedText" />
 
-
             <TextView
                 android:id="@+id/textViewGetFiscalMemoryInfo"
                 android:layout_width="wrap_content"

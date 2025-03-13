@@ -29,10 +29,12 @@ public class Info extends TLVEncodable {
     public static final byte TAG_MODE = (byte) 0x07;
     public static final byte TAG_POS_LOCKED = (byte) 0x08;
     public static final byte TAG_POS_AUTH = (byte) 0x09;
+    public static final byte TAG_PATCH = (byte) 0x0a;
     public static final byte TAG_MEMORY = (byte) 0x80;
 
     public static void buildTlvTagDescriptions(TlvTagDescriptions parentTlvTagDescriptions, TlvTagDescriptions.OID oid) {
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_VERSION, "AppletVersion"));
+        parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_PATCH, "Patch"));
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_CPLC, "CPLC"));
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_TERMINAL_ID, "TerminalID"));
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_SYNC_CHALLENGE, "SyncChallenge"));
@@ -46,6 +48,7 @@ public class Info extends TLVEncodable {
     }
 
     private String appletVersion;
+    private String patch;
     private byte[] cplc;
     private String terminalID;
     private String syncChallenge;
@@ -64,6 +67,9 @@ public class Info extends TLVEncodable {
         }
         if (cplc != null) {
             w.write(TLV.encode(TAG_CPLC, cplc));
+        }
+        if (patch != null) {
+            w.write(TLV.encode(TAG_PATCH, HexBin.decode(patch)));
         }
         if (terminalID != null && !terminalID.isEmpty()) {
             w.write(TLV.encode(TAG_TERMINAL_ID, TerminalID.encode(terminalID)));
@@ -204,6 +210,17 @@ public class Info extends TLVEncodable {
                     }
                 });
             }
+            if (tv.getTag() == TAG_PATCH) {
+                str.read(tv, new SingleTagReader.Callback() {
+                    @Override
+                    public boolean assign(TV tv) throws Exception {
+                        if (tv.getValue() != null) {
+                            o.patch = HexBin.encode(tv.getValue());
+                        }
+                        return true;
+                    }
+                });
+            }
             if (tv.getTag() == TAG_MEMORY) {
                 str.read(tv, new SingleTagReader.Callback() {
                     @Override
@@ -219,6 +236,10 @@ public class Info extends TLVEncodable {
 
     public String getAppletVersion() {
         return appletVersion;
+    }
+
+    public String getPatch() {
+        return patch;
     }
 
     public void setAppletVersion(String appletVersion) {
@@ -243,6 +264,26 @@ public class Info extends TLVEncodable {
 
     public String getSyncChallenge() {
         return syncChallenge;
+    }
+
+    public void setPatch(String patch) {
+        this.patch = patch;
+    }
+
+    public String getJcreVersion() {
+        return jcreVersion;
+    }
+
+    public void setJcreVersion(String jcreVersion) {
+        this.jcreVersion = jcreVersion;
+    }
+
+    public Byte getMode() {
+        return mode;
+    }
+
+    public void setMode(Byte mode) {
+        this.mode = mode;
     }
 
     public void setSyncChallenge(String syncChallenge) {

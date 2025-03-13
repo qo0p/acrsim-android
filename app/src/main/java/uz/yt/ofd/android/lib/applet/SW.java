@@ -36,9 +36,12 @@ public enum SW {
 
     LOCKED_SYNC_WITH_SERVER((short) 0x9090),
     DATETIME_SYNC_WITH_SERVER((short) 0x9091),
-    ALREADY_POS_LOCKED((short)  0x9092),
-    POS_AUTH_FAIL((short)  0x9093),
-    NOT_ENOUGH_MEMORY((short)  0x90FF),
+    ALREADY_POS_LOCKED((short) 0x9092),
+    POS_AUTH_FAIL((short) 0x9093),
+
+    ZREPORTS_MEMORY_FULL((short) 0x90F0),
+    RECEIPTS_MEMORY_FULL((short) 0x90F1),
+    NOT_ENOUGH_MEMORY((short) 0x90FF),
 
     BYTES_REMAINING_00((short) 24832),
     WRONG_LENGTH((short) 26368),
