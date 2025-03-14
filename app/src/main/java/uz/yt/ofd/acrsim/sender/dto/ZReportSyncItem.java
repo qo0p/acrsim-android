@@ -13,6 +13,11 @@ public class ZReportSyncItem extends SyncItem {
     }
 
     @Override
+    public Short getIndex() {
+        return file.getIndex();
+    }
+
+    @Override
     public File getFile() {
         return new File(FileType.ZReport.value, ZReportFile.VERSION,  file.getFile(),null);
     }

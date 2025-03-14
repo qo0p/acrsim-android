@@ -11,6 +11,7 @@ import java.io.OutputStream;
 import uz.yt.ofd.android.lib.codec.BCD8;
 import uz.yt.ofd.android.lib.codec.TerminalID;
 import uz.yt.ofd.android.lib.codec.TlvTagDescriptions;
+import uz.yt.ofd.android.lib.codec.Utils;
 import uz.yt.ofd.android.lib.codec.receipt20.ReceiptType;
 import uz.yt.ofd.android.lib.codec.tlv.SingleTagReader;
 import uz.yt.ofd.android.lib.codec.tlv.TLV;
@@ -27,6 +28,7 @@ public class ReceiptFile extends TLVEncodable {
     public static final byte TAG_SIGNATURE = (byte) 0x03;
     public static final byte TAG_ENCRYPTED_DATA = (byte) 0x04;
     public static final byte TAG_TYPE = (byte) 0x05;
+    public static final byte TAG_INDEX = (byte) 0x06;
 
     public static void buildTlvTagDescriptions(TlvTagDescriptions parentTlvTagDescriptions, TlvTagDescriptions.OID oid) {
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_TERMINAL_ID, "TerminalID"));
@@ -34,12 +36,15 @@ public class ReceiptFile extends TLVEncodable {
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_SIGNATURE, "Signature"));
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_ENCRYPTED_DATA, "EncryptedData"));
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_TYPE, "Type"));
+        parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_INDEX, "Index"));
     }
 
     String terminalID;
     Long receiptSeq;
     byte[] signature;
     ReceiptType type;
+
+    Short index;
     byte[] encryptedData;
 
     byte[] file;
@@ -61,6 +66,9 @@ public class ReceiptFile extends TLVEncodable {
         }
         if (type != null) {
             writeByte(TAG_TYPE, type.getValue(), w);
+        }
+        if (index != null) {
+            writeShort(TAG_INDEX, index, w);
         }
     }
 
@@ -132,6 +140,19 @@ public class ReceiptFile extends TLVEncodable {
                     }
                 });
             }
+            if (tv.getTag() == TAG_INDEX) {
+                str.read(tv, new SingleTagReader.Callback() {
+                    @Override
+                    public boolean assign(TV tv) throws Exception {
+                        if (tv.getValue() != null && tv.getValue().length == 2) {
+                            o.index = Utils.readShort(tv.getValue(), 0);
+                        } else {
+                            throw new IllegalArgumentException(String.format("index must be 2 bytes long"));
+                        }
+                        return true;
+                    }
+                });
+            }
         }
         return o;
     }
@@ -150,6 +171,18 @@ public class ReceiptFile extends TLVEncodable {
 
     public void setReceiptSeq(long receiptSeq) {
         this.receiptSeq = receiptSeq;
+    }
+
+    public void setReceiptSeq(Long receiptSeq) {
+        this.receiptSeq = receiptSeq;
+    }
+
+    public Short getIndex() {
+        return index;
+    }
+
+    public void setIndex(Short index) {
+        this.index = index;
     }
 
     public byte[] getSignature() {

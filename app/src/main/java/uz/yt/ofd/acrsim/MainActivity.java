@@ -856,11 +856,12 @@ public class MainActivity extends AppCompatActivity {
         int unsuccessfulAckCount = 0;
         for (SyncItem syncItem : syncItems) {
             AckFile af = syncItem.getAckFile();
+            Short index = syncItem.getIndex();
             switch (af.getStatus()) {
                 case Acknowledge:
                     byte[] ack = af.getBody();
                     try {
-                        new AckCommand(ack).run(apduio, VoidDecoder.class);
+                        new AckCommand(ack, index).run(apduio, VoidDecoder.class);
                         successfulAckCount++;
                     } catch (SWException swe) {
                         if (swe.getSw().equals(SW.NOT_FOUND)) {

@@ -7,6 +7,8 @@ public abstract class SyncItem {
 
     private AckFile ackFile;
 
+    public abstract Short getIndex();
+
     public abstract File getFile();
 
     public void setAckFile(AckFile ackFile) {

@@ -12,13 +12,20 @@ import uz.yt.ofd.android.lib.applet.decoder.VoidDecoder;
 public class AckCommand extends AbstractCommand<VoidDecoder> {
 
     private final byte[] ackFile;
+    private Short index;
 
-    public AckCommand(byte[] ackFile) {
+    public AckCommand(byte[] ackFile, Short index) {
         this.ackFile = ackFile;
+        this.index = index;
     }
 
     @Override
     public APDUCommand makeCommand() {
-        return new APDUCommand("---ack---", (byte) 0x00, Instruction.ACK[0], Instruction.ACK[1], Instruction.ACK[2], ackFile);
+        if (index == null) {
+            index = (short) -1;
+        }
+        byte p1 = (byte) (index >> 8);
+        byte p2 = (byte) (index & 0xff);
+        return new APDUCommand("---ack---", (byte) 0x00, Instruction.INS_ACK, p1, p2, ackFile);
     }
 }

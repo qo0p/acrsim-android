@@ -15,6 +15,11 @@ public class ReceiptSyncItem extends SyncItem {
         this.body = body;
     }
 
+    @Override
+    public Short getIndex() {
+        return header.getIndex();
+    }
+
     public File getFile() {
         FileType t = FileType.ShortReceipt;
         byte v = ReceiptFile.VERSION;
