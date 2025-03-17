@@ -46,50 +46,100 @@
 
 Память нового ФМ
 
+`ZREPORTS_ALLOCATED` = 0
+`RECEIPTS_ALLOCATED` = 0
+`ZREPORTS_COUNT` = 0
+`RECEIPTS_COUNT` = 0
+
 |`   `|`   `|`   `|`   `|`   `|`   `|`   `|`   `|`   `|`   `|`   `|`   `|`   `|`   `|
 |-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
 
 После открытия ZReport
+
+`ZREPORTS_ALLOCATED` = 1
+`RECEIPTS_ALLOCATED` = 0
+`ZREPORTS_COUNT` = 1
+`RECEIPTS_COUNT` = 0
 
 |`Z1 `|`   `|`   `|`   `|`   `|`   `|`   `|`   `|`   `|`   `|`   `|`   `|`   `|`   `|
 |-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
 
 После регистрации Receipt
 
+`ZREPORTS_ALLOCATED` = 1
+`RECEIPTS_ALLOCATED` = 1
+`ZREPORTS_COUNT` = 1
+`RECEIPTS_COUNT` = 1
+
 |`Z1 `|`   `|`   `|`   `|`   `|`   `|`   `|`   `|`   `|`   `|`   `|`   `|`   `|`R1 `|
 |-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
 
 После регистрации 7 Receipt
+
+`ZREPORTS_ALLOCATED` = 1
+`RECEIPTS_ALLOCATED` = 8
+`ZREPORTS_COUNT` = 1
+`RECEIPTS_COUNT` = 8
 
 |`Z1 `|`   `|`   `|`   `|`   `|`   `|`R8 `|`R7 `|`R6 `|`R5 `|`R4 `|`R3 `|`R2 `|`R1 `|
 |-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
 
 После закрытия, отправки и открытия ZReport
 
+`ZREPORTS_ALLOCATED` = 2
+`RECEIPTS_ALLOCATED` = 8
+`ZREPORTS_COUNT` = 2
+`RECEIPTS_COUNT` = 8
+
 |`Z1 `|`Z2 `|`   `|`   `|`   `|`   `|`R8 `|`R7 `|`R6 `|`R5 `|`R4 `|`R3 `|`R2 `|`R1 `|
 |-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
 
 После отправки Receipt R8,R7,R6 и получения AckFile
+
+`ZREPORTS_ALLOCATED` = 2
+`RECEIPTS_ALLOCATED` = 8
+`ZREPORTS_COUNT` = 2
+`RECEIPTS_COUNT` = 5
 
 |`Z1 `|`Z2 `|`   `|`   `|`   `|`   `|`R. `|`R. `|`R. `|`R5 `|`R4 `|`R3 `|`R2 `|`R1 `|
 |-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
 
 После регистрации 2 Receipt
 
+`ZREPORTS_ALLOCATED` = 2
+`RECEIPTS_ALLOCATED` = 8
+`ZREPORTS_COUNT` = 2
+`RECEIPTS_COUNT` = 7
+
 |`Z1 `|`Z2 `|`   `|`   `|`   `|`   `|`R. `|`R10`|`R9 `|`R5 `|`R4 `|`R3 `|`R2 `|`R1 `|
 |-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
 
 После отправки всех Receipt и получения AckFile
+
+`ZREPORTS_ALLOCATED` = 2
+`RECEIPTS_ALLOCATED` = 8
+`ZREPORTS_COUNT` = 2
+`RECEIPTS_COUNT` = 0
 
 |`Z1 `|`Z2 `|`   `|`   `|`   `|`   `|`R. `|`R. `|`R. `|`R. `|`R. `|`R. `|`R. `|`R. `|
 |-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
 
 После закрытия, отправки и открытия ZReport
 
+`ZREPORTS_ALLOCATED` = 3
+`RECEIPTS_ALLOCATED` = 8
+`ZREPORTS_COUNT` = 3
+`RECEIPTS_COUNT` = 0
+
 |`Z1 `|`Z2 `|`Z3 `|`   `|`   `|`   `|`R. `|`R. `|`R. `|`R. `|`R. `|`R. `|`R. `|`R. `|
 |-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
 
 Случай когда нет возможности открытия ZReport
+
+`ZREPORTS_ALLOCATED` = 4
+`RECEIPTS_ALLOCATED` = 10
+`ZREPORTS_COUNT` = 4
+`RECEIPTS_COUNT` = 5
 
 |`Z1 `|`Z2 `|`Z3 `|`Z4 `|`R. `|`R. `|`R42`|`R41`|`R40`|`R. `|`R. `|`R27`|`R11`|`R. `|
 |-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
@@ -205,6 +255,13 @@ fiscal-drive-service devtool test-server
     - `TAG_FIRST_UNACKNOWLEDGED_RECEIPT_TIME` = 0x04 - Дата-время первого неотправленного на сервер чека
     - `TAG_ZREPORTS_COUNT` = 0x05 - Кол-во ZReport
     - `TAG_RECEIPTS_COUNT` = 0x06 - Кол-во неотправленных Receipt
+    - `TAG_ZREPORTS_CAPACITY` = 0x07 - Макс. кол-во ZReport которое можно открыть при условии что памяти ФМ достаточно
+    - `TAG_RECEIPTS_CAPACITY` = 0x08 - Макс. кол-во Receipt которое можно зарегистрировать (не отправляя на сервер) при условии что памяти ФМ достаточно
+    - `TAG_FREPORT_CURRENT_INDEX` = 0x09 - Текущий индекс записи который хранит информацию о фискальной памяти
+    - `TAG_ZREPORT_CURRENT_INDEX` = 0x0a - Текущий индекс записи который хранит информацию о ZReport
+    - `TAG_RECEIPT_CURRENT_INDEX` = 0x0b - Текущий индекс записи который хранит информацию о последнем зарегистрированном Receipt
+    - `TAG_ZREPORTS_ALLOCATED` = 0x0c - Кол-во занятых блоков памяти для хранения ZReport
+    - `TAG_RECEIPTS_ALLOCATED` = 0x0d - Кол-во занятых блоков памяти для хранения Receipt
     - `TAG_CASH_ACCUMULATOR` = 0x80 - Общая сумма наличности продажа/возврат
     - `TAG_CARD_ACCUMULATOR` = 0x81 - Общая сумма безналичности продажа/возврат
     - `TAG_VAT_ACCUMULATOR` = 0x82 - Общая сумма НДС продажа/возврат
