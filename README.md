@@ -146,9 +146,31 @@
 |`Z1 `|`Z2 `|`Z3 `|`Z4 `|`R. `|`R. `|`R42`|`R41`|`R40`|`R. `|`R. `|`R27`|`R11`|`R. `|
 |-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
 
+## Инструкции
+
+| Название                              | CLA, INS, P1, P2            | DATA             | Возврат                    | Описание                                                                                                                                                                                                                                                                                                                                                |
+|---------------------------------------|-----------------------------|------------------|----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `GET_VERSION`                         | `0x00`,`0x00`,`0x00`,`0x00` |                  | `short` + `SW`             | Получить версию апплета <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.GetVersionCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/GetInfoCommand.java))</sub>                                                                                                                                                               |
+| `GET_INFO`                            | `0x00`,`0x00`,`0x01`,`0x00` | `список тегов`   | `Info` + `SW`              | Получить информацию об ФМ, в DATA можно передавать список тегов полей (`[]byte`) <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.GetInfoCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/GetInfoCommand.java))</sub>                                                                                                         |
+| `GET_FISCAL_MEMORY_INFO`              | `0x00`,`0x00`,`0x02`,`0x00` | `список тегов`   | `FiscalMemoryInfo` + `SW`  | Получить информацию о фискальной памяти ФМ, в DATA можно передавать список тегов полей (`[]byte`) <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.GetFiscalMemoryInfoCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/GetFiscalMemoryInfoCommand.java))</sub>                                                                |
+| `GET_UNACKNOWLEDGED_ZREPORTS_INDEXES` | `0x00`,`0x00`,`0x03`,`0x00` |                  | `short` + `[]short` + `SW` | Получить reverse-индексы неотправленных на сервер ZReport <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.GetUnackowledgedZReportsIndexesCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/GetUnackowledgedZReportsIndexesCommand.java))</sub>                                                                                |
+| `GET_ZREPORT_INFO`                    | `0x00`,`0x01`,`0xXX`,`0xYY` | `список тегов`   | `ZReportInfo` + `SW`       | Получить информацию о ZReport, в P1,P2 передать reverse-индекс а в DATA можно передавать список тегов полей (`[]byte`) <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.GetZReportInfoCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/GetZReportInfoCommand.java))</sub>                                                     |
+| `GET_ZREPORT_FILE`                    | `0x00`,`0x02`,`0xXX`,`0xYY` |                  | `ZReportFile` + `SW`       | Получить файл ZReport для отправки на сервер (в P1,P2 передать reverse-индекс) <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.GetZReportFileCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/GetZReportFileCommand.java))</sub>                                                                                             |
+| `ZREPORT_OPEN`                        | `0x00`,`0x03`,`0x00`,`0x00` | `дата-время`     | `SW`                       | Открыть ZReport передав дату-время в формате `BCDDateTime` <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.OpenCloseZReportCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/OpenCloseZReportCommand.java))</sub>                                                                                                             |
+| `ZREPORT_CLOSE`                       | `0x00`,`0x03`,`0x01`,`0x00` | `дата-время`     | `SW`                       | Закрыть ZReport передав дату-время в формате `BCDDateTime` <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.OpenCloseZReportCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/OpenCloseZReportCommand.java))</sub>                                                                                                             |
+| `GET_RECEIPT_INFO`                    | `0x00`,`0x05`,`0xXX`,`0xYY` | `список тегов`   | `ReceiptInfo` + `SW`       | Получить информацию о Receipt, в P1,P2 передать reverse-индекс а в DATA можно передавать список тегов полей (`[]byte`) <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.GetReceiptInfoCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/GetReceiptInfoCommand.java))</sub>                                                     |
+| `GET_RECEIPT_FILE`                    | `0x00`,`0x06`,`0xXX`,`0xYY` |                  | `ReceiptFile` + `SW`       | Получить файл Receipt для отправки на сервер (в P1,P2 передать reverse-индекс) <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.GetReceiptFileCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/GetReceiptFileCommand.java))</sub>                                                                                             |
+| `ACK`                                 | `0x00`,`0x09`,`0xXX`,`0xYY` | `AckFile`        | `SW`                       | Передать в ФМ `AckFile` (для быстрого выполнения нужно в P1,P2 передать absolute-индекс ZReport/Receipt в памяти ФМ) от сервера полученный в ответ на передачу `ZReportFile` или `ReceiptFile` <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.AckCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/AckCommand.java))</sub>   |
+| `SYNC`                                | `0x00`,`0x11`,`0x00`,`0x00` | `SyncFile`       | `SW`                       | Синхронизации времени, состояния ФМ с сервером <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.SyncCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/SyncCommand.java))</sub>                                                                                                                                                 |
+| `RECEIPT_REGISTER`                    | `0x00`,`0x17`,`0x00`,`0x00` | `TotalBlock`     | `FiscalSignInfo` + `SW`    | Зарегистрировать чек передав `TotalBlock` и получить в ответ ФП <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.RegisterReceiptCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/RegisterReceiptCommand.java))</sub>                                                                                                          |
+| `SIGNED_CHALLENGE_AUTH`               | `0x00`,`0x0b`,`0x00`,`0x00` | `Challenge`      | `SignedChallenge` + `SW`   | Аутентификации по ФМ передав `Challenge` и получить в ответ подписанный `Challenge` <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.SignedChallengeAuthCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/SignedChallengeAuthCommand.java))</sub>                                                                              |
+| `POS_LOCK`                            | `0x00`,`0x0c`,`0x00`,`0x00` | `секретный ключ` | `SW`                       | Привязка ФМ к ККМ <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.POSLockCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/POSLockCommand.java))</sub>                                                                                                                                                                        |
+| `POS_CHALLENGE`                       | `0x00`,`0x0c`,`0x01`,`0x00` |                  | `POSChallenge` + `SW`      | Запрос `POSChallenge` из ФМ <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.POSChallengeCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/POSChallengeCommand.java))</sub>                                                                                                                                                    |
+| `POS_AUTH`                            | `0x00`,`0x0c`,`0x02`,`0x00` | `POSAuth`        | `SW`                       | Передать `POSAuth = SHA-256(секретный ключ + POSChallenge)` в ФМ после которого можно выполнить операцию открытии/закрытии ZReport или регистрации чека ФМ <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.POSAuthCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/POSAuthCommand.java))</sub>                               |
+
 ## Коды возврата SW
 
-ФМ всегда (по ISO7816) возвращает 2х байтовый SW-код после выполнения инструкции. Если ответ от ФМ не вернулся,то скорее всего проблема в драйвере SAM-считывателя. (см. класс [uz.yt.ofd.android.lib.applet.SW](app/src/main/java/uz/yt/ofd/android/SW.java))
+ФМ всегда (по ISO7816) возвращает 2х байтовый SW-код после выполнения инструкции. Если ответ от ФМ не вернулся,то скорее всего проблема в драйвере SAM-считывателя. (см. класс [uz.yt.ofd.android.lib.applet.SW](app/src/main/java/uz/yt/ofd/android/lib/applet/SW.java))
 
 | Код      | Название                                | Описание                                                                                                                                                                                                    |
 |----------|-----------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -460,27 +482,180 @@ TLV-структура состоит из полей:
 
 (см. класс [uz.yt.ofd.android.lib.codec.tlv.TLV](app/src/main/java/uz/yt/ofd/android/lib/codec/tlv/TLV.java))
 
-## Инструкции
+### OID
 
-| Название                              | CLA, INS, P1, P2            | DATA             | Возврат                    | Описание                                                                                                                                                                                                                                                                                                                                                |
-|---------------------------------------|-----------------------------|------------------|----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `GET_VERSION`                         | `0x00`,`0x00`,`0x00`,`0x00` |                  | `short` + `SW`             | Получить версию апплета <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.GetVersionCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/GetInfoCommand.java))</sub>                                                                                                                                                               |
-| `GET_INFO`                            | `0x00`,`0x00`,`0x01`,`0x00` | `список тегов`   | `Info` + `SW`              | Получить информацию об ФМ, в DATA можно передавать список тегов полей (`[]byte`) <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.GetInfoCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/GetInfoCommand.java))</sub>                                                                                                         |
-| `GET_FISCAL_MEMORY_INFO`              | `0x00`,`0x00`,`0x02`,`0x00` | `список тегов`   | `FiscalMemoryInfo` + `SW`  | Получить информацию о фискальной памяти ФМ, в DATA можно передавать список тегов полей (`[]byte`) <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.GetFiscalMemoryInfoCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/GetFiscalMemoryInfoCommand.java))</sub>                                                                |
-| `GET_UNACKNOWLEDGED_ZREPORTS_INDEXES` | `0x00`,`0x00`,`0x03`,`0x00` |                  | `short` + `[]short` + `SW` | Получить reverse-индексы неотправленных на сервер ZReport <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.GetUnackowledgedZReportsIndexesCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/GetUnackowledgedZReportsIndexesCommand.java))</sub>                                                                                |
-| `GET_ZREPORT_INFO`                    | `0x00`,`0x01`,`0xXX`,`0xYY` | `список тегов`   | `ZReportInfo` + `SW`       | Получить информацию о ZReport, в P1,P2 передать reverse-индекс а в DATA можно передавать список тегов полей (`[]byte`) <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.GetZReportInfoCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/GetZReportInfoCommand.java))</sub>                                                     |
-| `GET_ZREPORT_FILE`                    | `0x00`,`0x02`,`0xXX`,`0xYY` |                  | `ZReportFile` + `SW`       | Получить файл ZReport для отправки на сервер (в P1,P2 передать reverse-индекс) <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.GetZReportFileCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/GetZReportFileCommand.java))</sub>                                                                                             |
-| `ZREPORT_OPEN`                        | `0x00`,`0x03`,`0x00`,`0x00` | `дата-время`     | `SW`                       | Открыть ZReport передав дату-время в формате `BCDDateTime` <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.OpenCloseZReportCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/OpenCloseZReportCommand.java))</sub>                                                                                                             |
-| `ZREPORT_CLOSE`                       | `0x00`,`0x03`,`0x01`,`0x00` | `дата-время`     | `SW`                       | Закрыть ZReport передав дату-время в формате `BCDDateTime` <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.OpenCloseZReportCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/OpenCloseZReportCommand.java))</sub>                                                                                                             |
-| `GET_RECEIPT_INFO`                    | `0x00`,`0x05`,`0xXX`,`0xYY` | `список тегов`   | `ReceiptInfo` + `SW`       | Получить информацию о Receipt, в P1,P2 передать reverse-индекс а в DATA можно передавать список тегов полей (`[]byte`) <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.GetReceiptInfoCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/GetReceiptInfoCommand.java))</sub>                                                     |
-| `GET_RECEIPT_FILE`                    | `0x00`,`0x06`,`0xXX`,`0xYY` |                  | `ReceiptFile` + `SW`       | Получить файл Receipt для отправки на сервер (в P1,P2 передать reverse-индекс) <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.GetReceiptFileCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/GetReceiptFileCommand.java))</sub>                                                                                             |
-| `ACK`                                 | `0x00`,`0x09`,`0xXX`,`0xYY` | `AckFile`        | `SW`                       | Передать в ФМ `AckFile` (для быстрого выполнения нужно в P1,P2 передать absolute-индекс ZReport/Receipt в памяти ФМ) от сервера полученный в ответ на передачу `ZReportFile` или `ReceiptFile` <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.AckCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/AckCommand.java))</sub>   |
-| `SYNC`                                | `0x00`,`0x11`,`0x00`,`0x00` | `SyncFile`       | `SW`                       | Синхронизации времени, состояния ФМ с сервером <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.SyncCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/SyncCommand.java))</sub>                                                                                                                                                 |
-| `RECEIPT_REGISTER`                    | `0x00`,`0x17`,`0x00`,`0x00` | `TotalBlock`     | `FiscalSignInfo` + `SW`    | Зарегистрировать чек передав `TotalBlock` и получить в ответ ФП <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.RegisterReceiptCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/RegisterReceiptCommand.java))</sub>                                                                                                          |
-| `SIGNED_CHALLENGE_AUTH`               | `0x00`,`0x0b`,`0x00`,`0x00` | `Challenge`      | `SignedChallenge` + `SW`   | Аутентификации по ФМ передав `Challenge` и получить в ответ подписанный `Challenge` <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.SignedChallengeAuthCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/SignedChallengeAuthCommand.java))</sub>                                                                              |
-| `POS_LOCK`                            | `0x00`,`0x0c`,`0x00`,`0x00` | `секретный ключ` | `SW`                       | Привязка ФМ к ККМ <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.POSLockCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/POSLockCommand.java))</sub>                                                                                                                                                                        |
-| `POS_CHALLENGE`                       | `0x00`,`0x0c`,`0x01`,`0x00` |                  | `POSChallenge` + `SW`      | Запрос `POSChallenge` из ФМ <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.POSChallengeCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/POSChallengeCommand.java))</sub>                                                                                                                                                    |
-| `POS_AUTH`                            | `0x00`,`0x0c`,`0x02`,`0x00` | `POSAuth`        | `SW`                       | Передать `POSAuth = SHA-256(секретный ключ + POSChallenge)` в ФМ после которого можно выполнить операцию открытии/закрытии ZReport или регистрации чека ФМ <br /><sub>(см. класс [uz.yt.ofd.android.lib.applet.command.POSAuthCommand](app/src/main/java/uz/yt/ofd/android/lib/applet/command/POSAuthCommand.java))</sub>                               |
+`OID` - Идентификатор объекта TLV-структуры. `OID` применяется для идентификации вложенной TLV-структуры и примитива.
+
+Пример:
+
+| OID = Значение                                                   | Описание                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+|------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `8d.01 = 473825`                                                 | Примитив с тегом `0x01` и данными `0x473825` вложен в TLV-структуру с тегом `0x8d`                                                                                                                                                                                                                                                                                                                                                                           |
+| `8d.8e.01 = 36392e323138343632`                                  | Примитив с тегом `0x01` и данными `0x36392e323138343632` вложен в<br> TLV-структуру с тегом `0x8e` который вложен в TLV-структуру с тегом `0x8d`                                                                                                                                                                                                                                                                                                             |
+| `8d.8c[0].01 = 8080808080808080808080`<br>`8d.8c[1].01 = 818181` | TLV-структура с `OID` `8d.8c` является массивом<br> (т .е. в данном примере, TLV-структуру с тегом `0x8d` содержит две TLV-структуру с тегом `0x8с`)<br> Примитив с тегом `0x01` и данными `0x8080808080808080808080` вложен в TLV-структуру с тегом `0x8c` который вложен первым в TLV-структуру с тегом `0x8d`<br> Примитив с тегом `0x01` и данными `0x818181` вложен в TLV-структуру с тегом `0x8c` который вложен вторым в TLV-структуру с тегом `0x8d` |
+
+(см. класс [uz.yt.ofd.android.lib.codec.tlv.OID](app/src/main/java/uz/yt/ofd/android/lib/codec/tlv/OID.java))
+
+### Info
+
+`Info` - TLV-структура которая содержит информацию о ФМ. 
+
+| Поле                 |  Тег   | Тип          | Описание                                                      |
+|----------------------|:------:|--------------|---------------------------------------------------------------|
+| `TAG_VERSION`        | `0x01` | `short`      | Версия ФМ                                                     |
+| `TAG_CPLC`           | `0x02` | `[]byte`     | Заводской номер ФМ (может быть пустым у некоторых смарт-карт) |
+| `TAG_TERMINAL_ID`    | `0x03` | `TerminalID` | Серийный номер ФМ                                             |
+| `TAG_SYNC_CHALLENGE` | `0x04` | `[]byte`     | `Challenge` для синхронизации с сервером ОФД                  |
+| `TAG_LOCKED`         | `0x05` | `byte`       | ФМ блокирован - `0x00` или нет - `0xff`                       |
+| `TAG_JCRE_VERSION`   | `0x06` | `short`      | Версия `JCRE`                                                 |
+| `TAG_MODE`           | `0x07` | `byte`       | Режим работы, тест - `0x01` или продакшн - `0x02`             |
+| `TAG_POS_LOCKED`     | `0x08` | `byte`       | ФМ привязан к ККМ - `0x00` или нет - `0xff`                   |
+| `TAG_POS_AUTH`       | `0x09` | `byte`       | ФМ аутентифицировал ККМ - `0x00` или нет - `0xff`             |
+| `TAG_PATCH`          | `0x0a` | `[]byte`     | Версия патча ФМ                                               |
+| `TAG_MEMORY`         | `0x80` | `MemoryInfo` | Информация о доступной памяти ФМ                              |
+
+(см. класс [uz.yt.ofd.android.lib.applet.dto.Info](app/src/main/java/uz/yt/ofd/android/lib/applet/dto/Info.java))
+
+### MemoryInfo
+
+`MemoryInfo` - TLV-структура которая содержит информацию о доступной памяти ФМ.
+
+| Поле                 |  Тег   | Тип     | Описание              |
+|----------------------|:------:|---------|-----------------------|
+| `TAG_AVAIL_PERSIST`  | `0x01` | `short` | ПЗУ (EEPROM, Flash)   |
+| `TAG_AVAIL_RESET`    | `0x02` | `short` | ОЗУ                   |
+| `TAG_AVAIL_DESELECT` | `0x03` | `short` | ОЗУ                   |
+
+(см. класс [uz.yt.ofd.android.lib.applet.dto.MemoryInfo](app/src/main/java/uz/yt/ofd/android/lib/applet/dto/MemoryInfo.java))
+
+
+### FiscalMemoryInfo
+
+`FiscalMemoryInfo` - TLV-структура которая содержит информацию о фискальной памяти ФМ.
+
+| Поле                                    |  Тег   | Тип             | Описание                                                                                                          |
+|-----------------------------------------|:------:|-----------------|-------------------------------------------------------------------------------------------------------------------|
+| `TAG_TERMINAL_ID`                       | `0x01` | `TerminalID`    | Серийный номер ФМ                                                                                                 |
+| `TAG_RECEIPT_SEQ`                       | `0x02` | `BCD`           | Текущий номер чека                                                                                                |
+| `TAG_LAST_OPERATION_TIME`               | `0x03` | `BCDDateTime`   | Дата-время последней операции                                                                                     |
+| `TAG_FIRST_UNACKNOWLEDGED_RECEIPT_TIME` | `0x04` | `BCDDateTime`   | Дата-время первого неотправленного на сервер чека                                                                 |
+| `TAG_ZREPORTS_COUNT`                    | `0x05` | `short`         | Кол-во ZReport                                                                                                    |
+| `TAG_RECEIPTS_COUNT`                    | `0x06` | `short`         | Кол-во неотправленных Receipt                                                                                     |
+| `TAG_ZREPORTS_CAPACITY`                 | `0x07` | `short`         | Макс. кол-во ZReport которое можно открыть при условии что памяти ФМ достаточно                                   |
+| `TAG_RECEIPTS_CAPACITY`                 | `0x08` | `short`         | Макс. кол-во Receipt которое можно зарегистрировать (не отправляя на сервер) при условии что памяти ФМ достаточно |
+| `TAG_FREPORT_CURRENT_INDEX`             | `0x09` | `short`         | Текущий absolute-индекс записи который хранит информацию о фискальной памяти                                      |
+| `TAG_ZREPORT_CURRENT_INDEX`             | `0x0a` | `short`         | Текущий absolute-индекс записи который хранит информацию о ZReport                                                |
+| `TAG_RECEIPT_CURRENT_INDEX`             | `0x0b` | `short`         | Текущий absolute-индекс записи который хранит информацию о последнем зарегистрированном Receipt                   |
+| `TAG_ZREPORTS_ALLOCATED`                | `0x0c` | `short`         | Кол-во занятых блоков памяти для хранения ZReport                                                                 |
+| `TAG_RECEIPTS_ALLOCATED`                | `0x0d` | `short`         | Кол-во занятых блоков памяти для хранения Receipt                                                                 |
+| `TAG_CASH_ACCUMULATOR`                  | `0x80` | `Account`       | Общая сумма наличности продажа/возврат                                                                            |
+| `TAG_CARD_ACCUMULATOR`                  | `0x81` | `Account`       | Общая сумма безналичности продажа/возврат                                                                         |
+| `TAG_VAT_ACCUMULATOR`                   | `0x82` | `Account`       | Общая сумма НДС продажа/возврат                                                                                   |
+
+(см. класс [uz.yt.ofd.android.lib.applet.dto.FiscalMemoryInfo](app/src/main/java/uz/yt/ofd/android/lib/applet/dto/FiscalMemoryInfo.java))
+
+### Account
+
+`Account` - TLV-структура которая содержит суммы продаж и возвратов.
+
+| Поле          |  Тег   | Тип     | Описание       |
+|---------------|:------:|---------|----------------|
+| `TAG_SALE`    | `0x01` | `BCD`   | Сумма продаж   |
+| `TAG_REFUND`  | `0x02` | `BCD`   | Сумма возврата |
+
+(см. класс [uz.yt.ofd.android.lib.applet.dto.Account](app/src/main/java/uz/yt/ofd/android/lib/applet/dto/Account.java))
+
+### ZReportInfo
+
+`ZReportInfo` - TLV-структура которая содержит информацию о ZReport.
+
+| Поле                     |  Тег   | Тип           | Описание                                  |
+|--------------------------|:------:|---------------|-------------------------------------------|
+| `TAG_TERMINAL_ID`        | `0x01` | `TerminalID`  | Серийный номер ФМ                         |
+| `TAG_OPEN_TIME`          | `0x02` | `BCDDateTime` | Дата-время открытия ZReport               |
+| `TAG_CLOSE_TIME`         | `0x03` | `BCDDateTime` | Дата-время закрытия ZReport               |
+| `TAG_TOTAL_SALE_COUNT`   | `0x04` | `short`       | Кол-во операций продажа                   |
+| `TAG_TOTAL_REFUND_COUNT` | `0x05` | `short`       | Кол-во операций возврат                   |
+| `TAG_LAST_RECEIPT_SEQ`   | `0x06` | `BCD`         | Последний номер чека                      |
+| `TAG_ACKNOWLEDGED_TIME`  | `0x07` | `BCDDateTime` | Дата-время отправки ZReport на сервер ОФД |
+| `TAG_FIRST_RECEIPT_SEQ`  | `0x08` | `BCD`         | Первый номер чека                         |
+| `TAG_TOTAL_CASH`         | `0x80` | `Account`     | Общая сумма наличности продажа/возврат    |
+| `TAG_TOTAL_CARD`         | `0x81` | `Account`     | Общая сумма безналичности продажа/возврат |
+| `TAG_TOTAL_VAT`          | `0x82` | `Account`     | Общая сумма НДС продажа/возврат           |
+
+(см. класс [uz.yt.ofd.android.lib.applet.dto.ZReportInfo](app/src/main/java/uz/yt/ofd/android/lib/applet/dto/ZReportInfo.java))
+
+
+### ZReportFile
+
+`ZReportFile` - TLV-структура которая содержит информацию о ZReportFile.
+
+| Поле                 |  Тег   | Тип           | Описание                    |
+|----------------------|:------:|---------------|-----------------------------|
+| `TAG_TERMINAL_ID`    | `0x01` | `TerminalID`  | Серийный номер ФМ           |
+| `TAG_CLOSE_TIME`     | `0x02` | `BCDDateTime` | Дата-время закрытия ZReport |
+| `TAG_SIGNATURE`      | `0x03` | `[]byte`      | ЭЦП                         |
+| `TAG_ENCRYPTED_DATA` | `0x04` | `[]byte`      | Зашифрованные данные        |
+| `TAG_INDEX`          | `0x05` | `short`       | absolute-индекс записи      |
+
+(см. класс [uz.yt.ofd.android.lib.applet.dto.ZReportFile](app/src/main/java/uz/yt/ofd/android/lib/applet/dto/ZReportFile.java))
+
+### ReceiptInfo
+
+`ReceiptInfo` - TLV-структура которая содержит информацию о Receipt.
+
+| Поле                 |  Тег   | Тип           | Описание                                                              |
+|----------------------|:------:|---------------|-----------------------------------------------------------------------|
+| `TAG_TERMINAL_ID`    | `0x01` | `TerminalID`  | Серийный номер ФМ                                                     |
+| `TAG_RECEIPT_SEQ`    | `0x02` | `BCD`         | Номер чека                                                            |
+| `TAG_TIME`           | `0x03` | `BCDDateTime` | Дата-время чека                                                       |
+| `TAG_FISCAL_SIGN`    | `0x04` | `FiscalSign`  | ФП чека                                                               |
+| `TAG_TYPE`           | `0x05` | `byte`        | Тип чека: `0x00` - Обычный (покупка), `0x01` - Аванс, `0x02` - Кредит |
+| `TAG_OPERATION`      | `0x06` | `byte`        | Тип операции: `0x00` - Продажа, `0x01` - Возврат (отзыв)              |
+| `TAG_RECEIVED_CASH`  | `0x07` | `BCD`         | Сумма наличности                                                      |
+| `TAG_RECEIVED_CARD`  | `0x08` | `BCD`         | Сумма безналичности                                                   |
+| `TAG_TOTAL_VAT`      | `0x09` | `BCD`         | Сумма НДС                                                             |
+| `TAG_ITEMS_COUNT`    | `0x0a` | `short`       | Кол-во товаров услуг в теле чека                                      |
+| `TAG_CIPHER_KEY`     | `0x0c` | `[]byte`      | Ключ шифрования тела чека                                             |
+| `TAG_EXTRA`          | `0x0e` | `[]byte`      | Доп. поля                                                             |
+| `TAG_ITEMS_HASH`     | `0x0f` | `[]byte`      | Хеш-значение тела чека                                                |
+
+(см. класс [uz.yt.ofd.android.lib.applet.dto.ReceiptInfo](app/src/main/java/uz/yt/ofd/android/lib/applet/dto/ReceiptInfo.java))
+
+### ReceiptFile
+
+`ReceiptFile` - TLV-структура которая содержит информацию о ReceiptFile.
+
+| Поле                   |  Тег   | Тип          | Описание                                                              |
+|------------------------|:------:|--------------|-----------------------------------------------------------------------|
+| `TAG_TERMINAL_ID`      | `0x01` | `TerminalID` | Серийный номер ФМ                                                     |
+| `TAG_RECEIPT_SEQ`      | `0x02` | `BCD`        | Номер чека                                                            |
+| `TAG_SIGNATURE`        | `0x03` | `[]byte`     | ЭЦП                                                                   |
+| `TAG_ENCRYPTED_DATA`   | `0x04` | `[]byte`     | Зашифрованные данные                                                  |
+| `TAG_TYPE`             | `0x05` | `byte`       | Тип чека: `0x00` - Обычный (покупка), `0x01` - Аванс, `0x02` - Кредит | 
+| `TAG_INDEX`            | `0x06` | `short`      | absolute-индекс записи                                                |
+
+(см. класс [uz.yt.ofd.android.lib.applet.dto.ReceiptFile](app/src/main/java/uz/yt/ofd/android/lib/applet/dto/ReceiptFile.java))
+
+### TotalBlock
+
+`TotalBlock` - Стркутура которая содержит информацию об итоговых суммах и времени чека, передается для регистрации в ФМ.
+
+| Поле             | offset:size | Тип             | Описание                                                              |
+|------------------|:-----------:|-----------------|-----------------------------------------------------------------------|
+| `ITEMS_HASH`     | `0x00:0x20` | `[]byte`        | Хеш-значение тела чека                                                |
+| `RECEIVED_CASH`  | `0x20:0x08` | `BCD`           | Сумма наличности                                                      |
+| `RECEIVED_CARD`  | `0x28:0x08` | `BCD`           | Сумма безналичности                                                   |
+| `TOTAL_VAT`      | `0x30:0x08` | `BCD`           | Сумма НДС                                                             |
+| `TIME`           | `0x38:0x08` | `BCDDateTime`   | Дата-время чека                                                       |
+| `TYPE`           | `0x40:0x01` | `byte`          | Тип чека: `0x00` - Обычный (покупка), `0x01` - Аванс, `0x02` - Кредит |
+| `OPERATION`      | `0x41:0x01` | `byte`          | Тип операции: `0x00` - Продажа, `0x01` - Возврат (отзыв)              |
+| `ITEMS_COUNT`    | `0x42:0x02` | `short`         | Кол-во товаров услуг в теле чека                                      |
+| `EXTRA`          | `0x44:0x20` | `[]byte`        | Доп. поля  (Не обязательное поле)                                     |
+
+(см. класс [uz.yt.ofd.android.lib.codec.receipt20.ReceiptCodec](app/src/main/java/uz/yt/ofd/android/lib/codec/receipt20/ReceiptCodec.java))
+
+
 
 ## Описание ACR-SIM
 
