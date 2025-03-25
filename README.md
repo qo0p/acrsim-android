@@ -239,7 +239,7 @@ _Другие коды возвращаются OC смарт-карты. См._
 |       `2230821535` |      `0x5351280322` |
 |     `791947779410` |    `0x014977749197` |
 
-(см. класс [uz.yt.ofd.android.lib.codec.BCD8](app/src/main/java/uz/yt/ofd/android/lib/codec/BCD8.java))
+> см. класс [uz.yt.ofd.android.lib.codec.BCD8](app/src/main/java/uz/yt/ofd/android/lib/codec/BCD8.java)
 
 ### TerminalID
 
@@ -255,7 +255,7 @@ _Другие коды возвращаются OC смарт-карты. См._
 | `VG949183117216` | `0x5647949183117216` |
 | `ZZ077335055257` | `0x5a5a077335055257` |
 
-(см. класс [uz.yt.ofd.android.lib.codec.TerminalID](app/src/main/java/uz/yt/ofd/android/lib/codec/TerminalID.java))
+> см. класс [uz.yt.ofd.android.lib.codec.TerminalID](app/src/main/java/uz/yt/ofd/android/lib/codec/TerminalID.java)
 
 ### BCDDateTime
 
@@ -271,7 +271,7 @@ _Другие коды возвращаются OC смарт-карты. См._
 | `2022-09-05 'T' 21:15:56` | `0x2022090554211556` |
 | `2025-06-02 'T' 13:55:37` | `0x2025060254135537` |
 
-(см. класс [uz.yt.ofd.android.lib.codec.BCDDateTime](app/src/main/java/uz/yt/ofd/android/lib/codec/BCDDateTime.java))
+> см. класс [uz.yt.ofd.android.lib.codec.BCDDateTime](app/src/main/java/uz/yt/ofd/android/lib/codec/BCDDateTime.java)
 
 ### FiscalSign
 
@@ -301,7 +301,26 @@ _Другие коды возвращаются OC смарт-карты. См._
 | `This is a test message lenght=32`                        |       `0xe5c72eb0`        |
 | `2021-07-26 12:38:48.157930054 +0500 +05 m=+12.220548675` |       `0xc6706bc9`        |
 
-(см. класс [uz.yt.ofd.android.lib.codec.Crc32c](app/src/main/java/uz/yt/ofd/android/lib/codec/Crc32c.java))
+> см. класс [uz.yt.ofd.android.lib.codec.Crc32c](app/src/main/java/uz/yt/ofd/android/lib/codec/Crc32c.java)
+
+### Тип чека
+
+| Тип чека          | Значение |
+|-------------------|:--------:|
+| Обычный (покупка) |  `0x00`  |
+| Аванс             |  `0x01`  |
+| Кредит            |  `0x02`  |
+
+> см. класс [uz.yt.ofd.android.lib.codec.receipt20.ReceiptType](app/src/main/java/uz/yt/ofd/android/lib/codec/receipt20/ReceiptType.java)
+
+### Тип операции
+
+| Тип операции    | Значение |
+|-----------------|:--------:|
+| Продажа         |  `0x00`  |
+| Возврат (отзыв) |  `0x01`  |
+
+> см. класс [uz.yt.ofd.android.lib.codec.receipt20.OperationType](app/src/main/java/uz/yt/ofd/android/lib/codec/receipt20/OperationType.java)
 
 ### NAME
 
@@ -448,7 +467,7 @@ _Другие коды возвращаются OC смарт-карты. См._
 | Древесный уголь 1 кг                                              | `0451454245524E5C4AE654434F4C5DE6B7E64B43`                                                                                           |
 | Жидкий парафин (средство для розжига костра Greenfield 500 мл)    | `0749444B494AE65040514055494EE6FF525145445253424FE6444C60E6514F4847494340E64B4F52535140E686D1C4C4CDC5C8C4CBC3E6BBB6B6E64D4CF6`       |
 
-(см. класс [uz.yt.ofd.android.lib.codec.text.TextCodecV2](app/src/main/java/uz/yt/ofd/android/lib/codec/text/TextCodecV2.java))
+> см. класс [uz.yt.ofd.android.lib.codec.text.TextCodecV2](app/src/main/java/uz/yt/ofd/android/lib/codec/text/TextCodecV2.java)
 
 ### TLV-структура
 
@@ -482,7 +501,7 @@ TLV-структура состоит из полей:
 
 Таким образом, TLV-структура может содержать данные размером не превышающих 2097151 байт.
 
-(см. класс [uz.yt.ofd.android.lib.codec.tlv.TLV](app/src/main/java/uz/yt/ofd/android/lib/codec/tlv/TLV.java))
+> см. класс [uz.yt.ofd.android.lib.codec.tlv.TLV](app/src/main/java/uz/yt/ofd/android/lib/codec/tlv/TLV.java)
 
 ### OID
 
@@ -496,27 +515,27 @@ TLV-структура состоит из полей:
 | `8d.8e.01 = 36392e323138343632`                                  | Примитив с тегом `0x01` и данными `0x36392e323138343632` вложен в<br> TLV-структуру с тегом `0x8e` который вложен в TLV-структуру с тегом `0x8d`                                                                                                                                                                                                                                                                                                             |
 | `8d.8c[0].01 = 8080808080808080808080`<br>`8d.8c[1].01 = 818181` | TLV-структура с `OID` `8d.8c` является массивом<br> (т .е. в данном примере, TLV-структуру с тегом `0x8d` содержит две TLV-структуру с тегом `0x8с`)<br> Примитив с тегом `0x01` и данными `0x8080808080808080808080` вложен в TLV-структуру с тегом `0x8c` который вложен первым в TLV-структуру с тегом `0x8d`<br> Примитив с тегом `0x01` и данными `0x818181` вложен в TLV-структуру с тегом `0x8c` который вложен вторым в TLV-структуру с тегом `0x8d` |
 
-(см. класс [uz.yt.ofd.android.lib.codec.tlv.OID](app/src/main/java/uz/yt/ofd/android/lib/codec/tlv/OID.java))
+> см. класс [uz.yt.ofd.android.lib.codec.tlv.OID](app/src/main/java/uz/yt/ofd/android/lib/codec/tlv/OID.java)
 
 ### Info
 
 `Info` - TLV-структура которая содержит информацию о ФМ. 
 
-| Поле                 |  Тег   | Тип          | Описание                                                      |
-|----------------------|:------:|--------------|---------------------------------------------------------------|
-| `TAG_VERSION`        | `0x01` | `short`      | Версия ФМ                                                     |
-| `TAG_CPLC`           | `0x02` | `[]byte`     | Заводской номер ФМ (может быть пустым у некоторых смарт-карт) |
-| `TAG_TERMINAL_ID`    | `0x03` | `TerminalID` | Серийный номер ФМ                                             |
-| `TAG_SYNC_CHALLENGE` | `0x04` | `[]byte`     | `Challenge` для синхронизации с сервером ОФД                  |
-| `TAG_LOCKED`         | `0x05` | `byte`       | ФМ блокирован - `0x00` или нет - `0xff`                       |
-| `TAG_JCRE_VERSION`   | `0x06` | `short`      | Версия `JCRE`                                                 |
-| `TAG_MODE`           | `0x07` | `byte`       | Режим работы, тест - `0x01` или продакшн - `0x02`             |
-| `TAG_POS_LOCKED`     | `0x08` | `byte`       | ФМ привязан к ККМ - `0x00` или нет - `0xff`                   |
-| `TAG_POS_AUTH`       | `0x09` | `byte`       | ФМ аутентифицировал ККМ - `0x00` или нет - `0xff`             |
-| `TAG_PATCH`          | `0x0a` | `[]byte`     | Версия патча ФМ                                               |
-| `TAG_MEMORY`         | `0x80` | `MemoryInfo` | Информация о доступной памяти ФМ                              |
+| Поле                 |   OID    | Тип          | Описание                                                      |
+|----------------------|:--------:|--------------|---------------------------------------------------------------|
+| `TAG_VERSION`        | `a0.01`  | `short`      | Версия ФМ                                                     |
+| `TAG_CPLC`           | `a0.02`  | `[]byte`     | Заводской номер ФМ (может быть пустым у некоторых смарт-карт) |
+| `TAG_TERMINAL_ID`    | `a0.03`  | `TerminalID` | Серийный номер ФМ                                             |
+| `TAG_SYNC_CHALLENGE` | `a0.04`  | `[]byte`     | `Challenge` для синхронизации с сервером ОФД                  |
+| `TAG_LOCKED`         | `a0.05`  | `byte`       | ФМ блокирован - `0x00` или нет - `0xff`                       |
+| `TAG_JCRE_VERSION`   | `a0.06`  | `short`      | Версия `JCRE`                                                 |
+| `TAG_MODE`           | `a0.07`  | `byte`       | Режим работы, тест - `0x01` или продакшн - `0x02`             |
+| `TAG_POS_LOCKED`     | `a0.08`  | `byte`       | ФМ привязан к ККМ - `0x00` или нет - `0xff`                   |
+| `TAG_POS_AUTH`       | `a0.09`  | `byte`       | ФМ аутентифицировал ККМ - `0x00` или нет - `0xff`             |
+| `TAG_PATCH`          | `a0.0a`  | `[]byte`     | Версия патча ФМ                                               |
+| `TAG_MEMORY`         | `a0.80`  | `MemoryInfo` | Информация о доступной памяти ФМ                              |
 
-(см. класс [uz.yt.ofd.android.lib.applet.dto.Info](app/src/main/java/uz/yt/ofd/android/lib/applet/dto/Info.java))
+> см. класс [uz.yt.ofd.android.lib.applet.dto.Info](app/src/main/java/uz/yt/ofd/android/lib/applet/dto/Info.java)
 
 ### MemoryInfo
 
@@ -528,134 +547,204 @@ TLV-структура состоит из полей:
 | `TAG_AVAIL_RESET`    | `0x02` | `short` | ОЗУ                   |
 | `TAG_AVAIL_DESELECT` | `0x03` | `short` | ОЗУ                   |
 
-(см. класс [uz.yt.ofd.android.lib.applet.dto.MemoryInfo](app/src/main/java/uz/yt/ofd/android/lib/applet/dto/MemoryInfo.java))
+> см. класс [uz.yt.ofd.android.lib.applet.dto.MemoryInfo](app/src/main/java/uz/yt/ofd/android/lib/applet/dto/MemoryInfo.java)
 
 
 ### FiscalMemoryInfo
 
 `FiscalMemoryInfo` - TLV-структура которая содержит информацию о фискальной памяти ФМ.
 
-| Поле                                    |  Тег   | Тип             | Описание                                                                                                          |
-|-----------------------------------------|:------:|-----------------|-------------------------------------------------------------------------------------------------------------------|
-| `TAG_TERMINAL_ID`                       | `0x01` | `TerminalID`    | Серийный номер ФМ                                                                                                 |
-| `TAG_RECEIPT_SEQ`                       | `0x02` | `BCD`           | Текущий номер чека                                                                                                |
-| `TAG_LAST_OPERATION_TIME`               | `0x03` | `BCDDateTime`   | Дата-время последней операции                                                                                     |
-| `TAG_FIRST_UNACKNOWLEDGED_RECEIPT_TIME` | `0x04` | `BCDDateTime`   | Дата-время первого неотправленного на сервер чека                                                                 |
-| `TAG_ZREPORTS_COUNT`                    | `0x05` | `short`         | Кол-во ZReport                                                                                                    |
-| `TAG_RECEIPTS_COUNT`                    | `0x06` | `short`         | Кол-во неотправленных Receipt                                                                                     |
-| `TAG_ZREPORTS_CAPACITY`                 | `0x07` | `short`         | Макс. кол-во ZReport которое можно открыть при условии что памяти ФМ достаточно                                   |
-| `TAG_RECEIPTS_CAPACITY`                 | `0x08` | `short`         | Макс. кол-во Receipt которое можно зарегистрировать (не отправляя на сервер) при условии что памяти ФМ достаточно |
-| `TAG_FREPORT_CURRENT_INDEX`             | `0x09` | `short`         | Текущий absolute-индекс записи который хранит информацию о фискальной памяти                                      |
-| `TAG_ZREPORT_CURRENT_INDEX`             | `0x0a` | `short`         | Текущий absolute-индекс записи который хранит информацию о ZReport                                                |
-| `TAG_RECEIPT_CURRENT_INDEX`             | `0x0b` | `short`         | Текущий absolute-индекс записи который хранит информацию о последнем зарегистрированном Receipt                   |
-| `TAG_ZREPORTS_ALLOCATED`                | `0x0c` | `short`         | Кол-во занятых блоков памяти для хранения ZReport                                                                 |
-| `TAG_RECEIPTS_ALLOCATED`                | `0x0d` | `short`         | Кол-во занятых блоков памяти для хранения Receipt                                                                 |
-| `TAG_CASH_ACCUMULATOR`                  | `0x80` | `Account`       | Общая сумма наличности продажа/возврат                                                                            |
-| `TAG_CARD_ACCUMULATOR`                  | `0x81` | `Account`       | Общая сумма безналичности продажа/возврат                                                                         |
-| `TAG_VAT_ACCUMULATOR`                   | `0x82` | `Account`       | Общая сумма НДС продажа/возврат                                                                                   |
+| Поле                                    |   OID    | Тип             | Описание                                                                                                          |
+|-----------------------------------------|:--------:|-----------------|-------------------------------------------------------------------------------------------------------------------|
+| `TAG_TERMINAL_ID`                       | `a1.01`  | `TerminalID`    | Серийный номер ФМ                                                                                                 |
+| `TAG_RECEIPT_SEQ`                       | `a1.02`  | `BCD`           | Текущий номер чека                                                                                                |
+| `TAG_LAST_OPERATION_TIME`               | `a1.03`  | `BCDDateTime`   | Дата-время последней операции                                                                                     |
+| `TAG_FIRST_UNACKNOWLEDGED_RECEIPT_TIME` | `a1.04`  | `BCDDateTime`   | Дата-время первого неотправленного на сервер чека                                                                 |
+| `TAG_ZREPORTS_COUNT`                    | `a1.05`  | `short`         | Кол-во ZReport                                                                                                    |
+| `TAG_RECEIPTS_COUNT`                    | `a1.06`  | `short`         | Кол-во неотправленных Receipt                                                                                     |
+| `TAG_ZREPORTS_CAPACITY`                 | `a1.07`  | `short`         | Макс. кол-во ZReport которое можно открыть при условии что памяти ФМ достаточно                                   |
+| `TAG_RECEIPTS_CAPACITY`                 | `a1.08`  | `short`         | Макс. кол-во Receipt которое можно зарегистрировать (не отправляя на сервер) при условии что памяти ФМ достаточно |
+| `TAG_FREPORT_CURRENT_INDEX`             | `a1.09`  | `short`         | Текущий absolute-индекс записи который хранит информацию о фискальной памяти                                      |
+| `TAG_ZREPORT_CURRENT_INDEX`             | `a1.0a`  | `short`         | Текущий absolute-индекс записи который хранит информацию о ZReport                                                |
+| `TAG_RECEIPT_CURRENT_INDEX`             | `a1.0b`  | `short`         | Текущий absolute-индекс записи который хранит информацию о последнем зарегистрированном Receipt                   |
+| `TAG_ZREPORTS_ALLOCATED`                | `a1.0c`  | `short`         | Кол-во занятых блоков памяти для хранения ZReport                                                                 |
+| `TAG_RECEIPTS_ALLOCATED`                | `a1.0d`  | `short`         | Кол-во занятых блоков памяти для хранения Receipt                                                                 |
+| `TAG_CASH_ACCUMULATOR`                  | `a1.80`  | `Account`       | Общая сумма наличности продажа/возврат                                                                            |
+| `TAG_CARD_ACCUMULATOR`                  | `a1.81`  | `Account`       | Общая сумма безналичности продажа/возврат                                                                         |
+| `TAG_VAT_ACCUMULATOR`                   | `a1.82`  | `Account`       | Общая сумма НДС продажа/возврат                                                                                   |
 
-(см. класс [uz.yt.ofd.android.lib.applet.dto.FiscalMemoryInfo](app/src/main/java/uz/yt/ofd/android/lib/applet/dto/FiscalMemoryInfo.java))
+> см. класс [uz.yt.ofd.android.lib.applet.dto.FiscalMemoryInfo](app/src/main/java/uz/yt/ofd/android/lib/applet/dto/FiscalMemoryInfo.java)
 
 ### Account
 
 `Account` - TLV-структура которая содержит суммы продаж и возвратов.
 
-| Поле          |  Тег   | Тип     | Описание       |
-|---------------|:------:|---------|----------------|
-| `TAG_SALE`    | `0x01` | `BCD`   | Сумма продаж   |
-| `TAG_REFUND`  | `0x02` | `BCD`   | Сумма возврата |
+| Поле          |  Тег   | Тип     | Описание                 |
+|---------------|:------:|---------|--------------------------|
+| `TAG_SALE`    | `0x01` | `BCD`   | Сумма продаж в тийинах   |
+| `TAG_REFUND`  | `0x02` | `BCD`   | Сумма возврата в тийинах |
 
-(см. класс [uz.yt.ofd.android.lib.applet.dto.Account](app/src/main/java/uz/yt/ofd/android/lib/applet/dto/Account.java))
+> см. класс [uz.yt.ofd.android.lib.applet.dto.Account](app/src/main/java/uz/yt/ofd/android/lib/applet/dto/Account.java)
 
 ### ZReportInfo
 
 `ZReportInfo` - TLV-структура которая содержит информацию о ZReport.
 
-| Поле                     |  Тег   | Тип           | Описание                                  |
-|--------------------------|:------:|---------------|-------------------------------------------|
-| `TAG_TERMINAL_ID`        | `0x01` | `TerminalID`  | Серийный номер ФМ                         |
-| `TAG_OPEN_TIME`          | `0x02` | `BCDDateTime` | Дата-время открытия ZReport               |
-| `TAG_CLOSE_TIME`         | `0x03` | `BCDDateTime` | Дата-время закрытия ZReport               |
-| `TAG_TOTAL_SALE_COUNT`   | `0x04` | `short`       | Кол-во операций продажа                   |
-| `TAG_TOTAL_REFUND_COUNT` | `0x05` | `short`       | Кол-во операций возврат                   |
-| `TAG_LAST_RECEIPT_SEQ`   | `0x06` | `BCD`         | Последний номер чека                      |
-| `TAG_ACKNOWLEDGED_TIME`  | `0x07` | `BCDDateTime` | Дата-время отправки ZReport на сервер ОФД |
-| `TAG_FIRST_RECEIPT_SEQ`  | `0x08` | `BCD`         | Первый номер чека                         |
-| `TAG_TOTAL_CASH`         | `0x80` | `Account`     | Общая сумма наличности продажа/возврат    |
-| `TAG_TOTAL_CARD`         | `0x81` | `Account`     | Общая сумма безналичности продажа/возврат |
-| `TAG_TOTAL_VAT`          | `0x82` | `Account`     | Общая сумма НДС продажа/возврат           |
+| Поле                     |   OID    | Тип           | Описание                                  |
+|--------------------------|:--------:|---------------|-------------------------------------------|
+| `TAG_TERMINAL_ID`        | `a2.01`  | `TerminalID`  | Серийный номер ФМ                         |
+| `TAG_OPEN_TIME`          | `a2.02`  | `BCDDateTime` | Дата-время открытия ZReport               |
+| `TAG_CLOSE_TIME`         | `a2.03`  | `BCDDateTime` | Дата-время закрытия ZReport               |
+| `TAG_TOTAL_SALE_COUNT`   | `a2.04`  | `short`       | Кол-во операций продажа                   |
+| `TAG_TOTAL_REFUND_COUNT` | `a2.05`  | `short`       | Кол-во операций возврат                   |
+| `TAG_LAST_RECEIPT_SEQ`   | `a2.06`  | `BCD`         | Последний номер чека                      |
+| `TAG_ACKNOWLEDGED_TIME`  | `a2.07`  | `BCDDateTime` | Дата-время отправки ZReport на сервер ОФД |
+| `TAG_FIRST_RECEIPT_SEQ`  | `a2.08`  | `BCD`         | Первый номер чека                         |
+| `TAG_TOTAL_CASH`         | `a2.80`  | `Account`     | Общая сумма наличности продажа/возврат    |
+| `TAG_TOTAL_CARD`         | `a2.81`  | `Account`     | Общая сумма безналичности продажа/возврат |
+| `TAG_TOTAL_VAT`          | `a2.82`  | `Account`     | Общая сумма НДС продажа/возврат           |
 
-(см. класс [uz.yt.ofd.android.lib.applet.dto.ZReportInfo](app/src/main/java/uz/yt/ofd/android/lib/applet/dto/ZReportInfo.java))
-
+> см. класс [uz.yt.ofd.android.lib.applet.dto.ZReportInfo](app/src/main/java/uz/yt/ofd/android/lib/applet/dto/ZReportInfo.java)
 
 ### ZReportFile
 
 `ZReportFile` - TLV-структура которая содержит информацию о ZReportFile.
 
-| Поле                 |  Тег   | Тип           | Описание                    |
-|----------------------|:------:|---------------|-----------------------------|
-| `TAG_TERMINAL_ID`    | `0x01` | `TerminalID`  | Серийный номер ФМ           |
-| `TAG_CLOSE_TIME`     | `0x02` | `BCDDateTime` | Дата-время закрытия ZReport |
-| `TAG_SIGNATURE`      | `0x03` | `[]byte`      | ЭЦП                         |
-| `TAG_ENCRYPTED_DATA` | `0x04` | `[]byte`      | Зашифрованные данные        |
-| `TAG_INDEX`          | `0x05` | `short`       | absolute-индекс записи      |
+| Поле                 |   OID   | Тип           | Описание                    |
+|----------------------|:-------:|---------------|-----------------------------|
+| `TAG_TERMINAL_ID`    | `a4.01` | `TerminalID`  | Серийный номер ФМ           |
+| `TAG_CLOSE_TIME`     | `a4.02` | `BCDDateTime` | Дата-время закрытия ZReport |
+| `TAG_SIGNATURE`      | `a4.03` | `[]byte`      | ЭЦП                         |
+| `TAG_ENCRYPTED_DATA` | `a4.04` | `[]byte`      | Зашифрованные данные        |
+| `TAG_INDEX`          | `a4.05` | `short`       | absolute-индекс записи      |
 
-(см. класс [uz.yt.ofd.android.lib.applet.dto.ZReportFile](app/src/main/java/uz/yt/ofd/android/lib/applet/dto/ZReportFile.java))
+> см. класс [uz.yt.ofd.android.lib.applet.dto.ZReportFile](app/src/main/java/uz/yt/ofd/android/lib/applet/dto/ZReportFile.java)
 
 ### ReceiptInfo
 
 `ReceiptInfo` - TLV-структура которая содержит информацию о Receipt.
 
-| Поле                 |  Тег   | Тип           | Описание                                                              |
-|----------------------|:------:|---------------|-----------------------------------------------------------------------|
-| `TAG_TERMINAL_ID`    | `0x01` | `TerminalID`  | Серийный номер ФМ                                                     |
-| `TAG_RECEIPT_SEQ`    | `0x02` | `BCD`         | Номер чека                                                            |
-| `TAG_TIME`           | `0x03` | `BCDDateTime` | Дата-время чека                                                       |
-| `TAG_FISCAL_SIGN`    | `0x04` | `FiscalSign`  | ФП чека                                                               |
-| `TAG_TYPE`           | `0x05` | `byte`        | Тип чека: `0x00` - Обычный (покупка), `0x01` - Аванс, `0x02` - Кредит |
-| `TAG_OPERATION`      | `0x06` | `byte`        | Тип операции: `0x00` - Продажа, `0x01` - Возврат (отзыв)              |
-| `TAG_RECEIVED_CASH`  | `0x07` | `BCD`         | Сумма наличности                                                      |
-| `TAG_RECEIVED_CARD`  | `0x08` | `BCD`         | Сумма безналичности                                                   |
-| `TAG_TOTAL_VAT`      | `0x09` | `BCD`         | Сумма НДС                                                             |
-| `TAG_ITEMS_COUNT`    | `0x0a` | `short`       | Кол-во товаров услуг в теле чека                                      |
-| `TAG_CIPHER_KEY`     | `0x0c` | `[]byte`      | Ключ шифрования тела чека                                             |
-| `TAG_EXTRA`          | `0x0e` | `[]byte`      | Доп. поля                                                             |
-| `TAG_ITEMS_HASH`     | `0x0f` | `[]byte`      | Хеш-значение `FullReceipt`                                            |
+| Поле                 |   OID   | Тип           | Описание                         |
+|----------------------|:-------:|---------------|----------------------------------|
+| `TAG_TERMINAL_ID`    | `a3.01` | `TerminalID`  | Серийный номер ФМ                |
+| `TAG_RECEIPT_SEQ`    | `a3.02` | `BCD`         | Номер чека                       |
+| `TAG_TIME`           | `a3.03` | `BCDDateTime` | Дата-время чека                  |
+| `TAG_FISCAL_SIGN`    | `a3.04` | `FiscalSign`  | ФП чека                          |
+| `TAG_TYPE`           | `a3.05` | `byte`        | Тип чека                         |
+| `TAG_OPERATION`      | `a3.06` | `byte`        | Тип операции                     |
+| `TAG_RECEIVED_CASH`  | `a3.07` | `BCD`         | Сумма наличности                 |
+| `TAG_RECEIVED_CARD`  | `a3.08` | `BCD`         | Сумма безналичности              |
+| `TAG_TOTAL_VAT`      | `a3.09` | `BCD`         | Сумма НДС                        |
+| `TAG_ITEMS_COUNT`    | `a3.0a` | `short`       | Кол-во товаров услуг в теле чека |
+| `TAG_CIPHER_KEY`     | `a3.0c` | `[]byte`      | Ключ шифрования тела чека        |
+| `TAG_EXTRA`          | `a3.0e` | `[]byte`      | Доп. поля                        |
+| `TAG_ITEMS_HASH`     | `a3.0f` | `[]byte`      | Хеш-значение `FullReceipt`       |
 
-(см. класс [uz.yt.ofd.android.lib.applet.dto.ReceiptInfo](app/src/main/java/uz/yt/ofd/android/lib/applet/dto/ReceiptInfo.java))
+> см. класс [uz.yt.ofd.android.lib.applet.dto.ReceiptInfo](app/src/main/java/uz/yt/ofd/android/lib/applet/dto/ReceiptInfo.java)
 
 ### ReceiptFile
 
 `ReceiptFile` - TLV-структура которая содержит информацию о ReceiptFile.
 
-| Поле                   |  Тег   | Тип          | Описание                                                              |
-|------------------------|:------:|--------------|-----------------------------------------------------------------------|
-| `TAG_TERMINAL_ID`      | `0x01` | `TerminalID` | Серийный номер ФМ                                                     |
-| `TAG_RECEIPT_SEQ`      | `0x02` | `BCD`        | Номер чека                                                            |
-| `TAG_SIGNATURE`        | `0x03` | `[]byte`     | ЭЦП                                                                   |
-| `TAG_ENCRYPTED_DATA`   | `0x04` | `[]byte`     | Зашифрованные данные                                                  |
-| `TAG_TYPE`             | `0x05` | `byte`       | Тип чека: `0x00` - Обычный (покупка), `0x01` - Аванс, `0x02` - Кредит | 
-| `TAG_INDEX`            | `0x06` | `short`      | absolute-индекс записи                                                |
+| Поле                   |   OID   | Тип          | Описание               |
+|------------------------|:-------:|--------------|------------------------|
+| `TAG_TERMINAL_ID`      | `a5.01` | `TerminalID` | Серийный номер ФМ      |
+| `TAG_RECEIPT_SEQ`      | `a5.02` | `BCD`        | Номер чека             |
+| `TAG_SIGNATURE`        | `a5.03` | `[]byte`     | ЭЦП                    |
+| `TAG_ENCRYPTED_DATA`   | `a5.04` | `[]byte`     | Зашифрованные данные   |
+| `TAG_TYPE`             | `a5.05` | `byte`       | Тип чека               | 
+| `TAG_INDEX`            | `a5.06` | `short`      | absolute-индекс записи |
 
-(см. класс [uz.yt.ofd.android.lib.applet.dto.ReceiptFile](app/src/main/java/uz/yt/ofd/android/lib/applet/dto/ReceiptFile.java))
+> см. класс [uz.yt.ofd.android.lib.applet.dto.ReceiptFile](app/src/main/java/uz/yt/ofd/android/lib/applet/dto/ReceiptFile.java)
+
+### FullReceipt
+
+`FullReceipt` - TLV-структура которая содержит всю информацию о чеке (товары/услуги их цены/кол-во и доп. данные)
+
+| Поле                    |   OID   | Тип                      | Описание                                                    |
+|-------------------------|:-------:|--------------------------|-------------------------------------------------------------|
+| `TAG_RECEIVED_CASH`     | `8d.01` | `BCD` (от 1 до 8 байтов) | Наличная сумма полученная от продажи в тийинах              |
+| `TAG_RECEIVED_CARD`     | `8d.02` | `BCD` (от 1 до 8 байтов) | Безналичная сумма полученная от продажи в тийинах           |
+| `TAG_TIME`              | `8d.03` | `BCDDateTime`            | Дата-время чека                                             |
+| `TAG_TYPE`              | `8d.04` | `byte`                   | Тип чека                                                    |
+| `TAG_OPERATION`         | `8d.05` | `byte`                   | Тип операции                                                |
+| `TAG_REFUND_INFO`       | `8d.8d` | `RefundInfo`             | Информацию об отозванном чеке (заполняется в чеке возврата) |
+| `TAG_LOCATION`          | `8d.8e` | `Location`               | Геолокация                                                  |
+| `TAG_ITEMS`             | `8d.8c` | `[]ReceiptItem`          | Информация о товарах/услугах                                |
+| `TAG_EXTRA_INFO`        | `8d.8f` | `ExtraInfo`              | Доп. Информация                                             |
+
+> см. класс [uz.yt.ofd.android.lib.codec.receipt20.Receipt](app/src/main/java/uz/yt/ofd/android/lib/codec/receipt20/Receipt.java)
+
+### ReceiptItem
+
+`ReceiptItem` - TLV-структура которая содержит о товарах/услугах их цен/кол-во и доп. данные
+
+| Поле                  |     OID      | Тип                                 | Описание                                                                                                 |
+|-----------------------|:------------:|-------------------------------------|----------------------------------------------------------------------------------------------------------|
+| `TAG_NAME`            |  `8d.8c.01`  | `NAME` (от 1 до 63 байтов)          | Название товара или услуги                                                                               |
+| `TAG_BARCODE`         |  `8d.8c.02`  | `ASCII-цифры` (от 1 до 63 байтов)   | Штрихкод                                                                                                 |
+| `TAG_LABEL`           |  `8d.8c.03`  | `ASCII` (от 1 до 63 байтов)         | Маркировка                                                                                               |
+| `TAG_SPIC`            |  `8d.8c.04`  | `ASCII-цифры` (от 1 до 18 байтов)   | ИКПУ (идентификационный код продукта и услуги по Единому электронному каталогу)                          |
+| `TAG_UNITS`           |  `8d.8c.05`  | `BCD` (от 1 до 8 байтов)            | Код ед. изм.                                                                                             |
+| `TAG_PRICE`           |  `8d.8c.06`  | `BCD` (от 1 до 8 байтов)            | Цена в тийинах (то есть умножается на 100) с учетом кол-ва (при кол-ве 3 шт, `Price` = 3*`Price_of_one`) |
+| `TAG_VAT_PERCENT`     |  `8d.8c.07`  | `BCD` (1 байт)                      | % НДС                                                                                                    |
+| `TAG_VAT`             |  `8d.8c.08`  | `BCD` (от 1 до 8 байтов)            | Сумма НДС в тийинах                                                                                      |
+| `TAG_AMOUNT`          |  `8d.8c.09`  | `BCD` (от 1 до 8 байтов)            | Кол-во<sup>1</sup>                                                                                       |
+| `TAG_DISCOUNT`        |  `8d.8c.0a`  | `BCD` (от 1 до 8 байтов)            | Цена скидки в тийинах                                                                                    |
+| `TAG_OTHER`           |  `8d.8c.0b`  | `BCD` (от 1 до 8 байтов)            | Цена прочей скидки (оплата по страховки и др.) в тийинах                                                 |
+| `TAG_PACKAGE_CODE`    |  `8d.8c.11`  | `ASCII-цифры` (от 1 до 20 байтов)   | Код упаковки                                                                                             |
+| `TAG_OWNER_TYPE`      |  `8d.8c.12`  | `byte`                              | Тип владельца продукта/услуги (см. справочник)                                                           |
+| `TAG_COMMISSION_INFO` |  `8d.8c.81`  | `CommissionInfo`                    | Признак комиссионного товара или услуги                                                                  |
+
+> <sup>1</sup> Поля `Amount` передается с учетом единицы измерения, то есть умножается на 1000<br>
+  Пример: 1 шт = 1000, 1 кг = 1000, 0.5 кг = 500, 125 г = 125, 1.5 литр = 1500, 2.5 метров = 2500, 1 бутылка (1.5 л) = 1000, 5 литр (молока) = 5000)
+
+> см. класс [uz.yt.ofd.android.lib.codec.receipt20.ReceiptItem](app/src/main/java/uz/yt/ofd/android/lib/codec/receipt20/ReceiptItem.java)
 
 ### TotalBlock
 
-`TotalBlock` - Стркутура которая содержит информацию об итоговых суммах и времени чека, передается для регистрации в ФМ.
+`TotalBlock` - Структура которая содержит информацию об итоговых суммах и времени чека, передается для регистрации в ФМ.
 
-| Поле             | offset:size | Тип             | Описание                                                              |
-|------------------|:-----------:|-----------------|-----------------------------------------------------------------------|
-| `ITEMS_HASH`     | `0x00:0x20` | `[]byte`        | Хеш-значение `FullReceipt`                                            |
-| `RECEIVED_CASH`  | `0x20:0x08` | `BCD`           | Сумма наличности                                                      |
-| `RECEIVED_CARD`  | `0x28:0x08` | `BCD`           | Сумма безналичности                                                   |
-| `TOTAL_VAT`      | `0x30:0x08` | `BCD`           | Сумма НДС                                                             |
-| `TIME`           | `0x38:0x08` | `BCDDateTime`   | Дата-время чека                                                       |
-| `TYPE`           | `0x40:0x01` | `byte`          | Тип чека: `0x00` - Обычный (покупка), `0x01` - Аванс, `0x02` - Кредит |
-| `OPERATION`      | `0x41:0x01` | `byte`          | Тип операции: `0x00` - Продажа, `0x01` - Возврат (отзыв)              |
-| `ITEMS_COUNT`    | `0x42:0x02` | `short`         | Кол-во товаров услуг в теле чека                                      |
-| `EXTRA`          | `0x44:0x20` | `[]byte`        | Доп. поля  (Не обязательное поле)                                     |
+| Поле             | offset:size | Тип             | Описание                          |
+|------------------|:-----------:|-----------------|-----------------------------------|
+| `ITEMS_HASH`     | `0x00:0x20` | `[]byte`        | Хеш-значение `FullReceipt`        |
+| `RECEIVED_CASH`  | `0x20:0x08` | `BCD`           | Сумма наличности в тийинах        |
+| `RECEIVED_CARD`  | `0x28:0x08` | `BCD`           | Сумма безналичности в тийинах     |
+| `TOTAL_VAT`      | `0x30:0x08` | `BCD`           | Сумма НДС в тийинах               |
+| `TIME`           | `0x38:0x08` | `BCDDateTime`   | Дата-время чека                   |
+| `TYPE`           | `0x40:0x01` | `byte`          | Тип чека                          |
+| `OPERATION`      | `0x41:0x01` | `byte`          | Тип операции                      |
+| `ITEMS_COUNT`    | `0x42:0x02` | `short`         | Кол-во товаров услуг в теле чека  |
+| `EXTRA`          | `0x44:0x20` | `[]byte`        | Доп. поля  (Не обязательное поле) |
 
-(см. класс [uz.yt.ofd.android.lib.codec.receipt20.ReceiptCodec](app/src/main/java/uz/yt/ofd/android/lib/codec/receipt20/ReceiptCodec.java))
+> см. класс [uz.yt.ofd.android.lib.codec.receipt20.ReceiptCodec](app/src/main/java/uz/yt/ofd/android/lib/codec/receipt20/ReceiptCodec.java)
+
+## Инструменты разработчика
+
+### Пример чека
+
+Пример чека, его TLV-структуру и `TotalBlock` можно сгенерировать командой:
+
+```
+fiscal-drive-service devtool receipt generate --tlv-out receipt.tlv --total-block-out receipt.totalblock
+```
+
+В консоле напечатается JSON-чек а в файле `receipt.tlv` и `receipt.totalblock` будет записан TLV-структура и `TotalBlock` чека
+
+Для просмотра TLV-структуры в виде дерева введите команду:
+
+```
+fiscal-drive-service devtool tlv parse --file receipt.tlv
+```
+
+Для просмотра TLV-структуры в виде списка OID введите команду:
+
+```
+fiscal-drive-service devtool tlv parse --oid-list --file receipt.tlv
+```
+
+> см. https://github.com/qo0p/fiscal-drive-service
+
 
 
 
