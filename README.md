@@ -817,6 +817,8 @@ https://ofd.soliq.uz/check?t=ZZ000000000000&r=22&c=20211102141307&s=445705250315
 
 Получаем QR-код:
 
+![](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkAQMAAABKLAcXAAAABlBMVEX///8AAABVwtN+AAABjUlEQVR4nMTSvaqrQBAH8BEhaeTYWsVXUNJK8iqnSzuwzSmE3c5XsPNVFFvJvsKm0XbFZgXZuZDkQLybe7zVvdP9YD/mzwz85+JUhD1rlCS9IfSKEHKvCAAdsbFcDB/Lzr5TtfR5aoL30jv8iLo3Qq/yd5jw7//+LE5l17O0/O76VQBRewDg9TPvqxgVHbBRhdYVWh4cwCsmEhvKx6EG9gHJTTti14vsUcfTAR2BrELFwiG7n1yLJ7DMi4X2kW8lFhZHTzSDNLAliID0KKRCR/m5oh1cIdsLR3iKjxFL1UKueKO0zc+UzXpDeIpbw/UedujIl0VgeUrZvc+1GHx2Bk9RHaEjX4q2x4TT896rgtNFmiAU53u+n+SnSgLXF38Qjnj92Vq4xtkOHKFHtWI2ygbtykLXY1PKm9hSY0Cx0NDsCiA+zpONaoOOOIlgFvVXN2hH6JXBbbFf9ePNldhYkg3kQMNfaDIspe6xu78LbD6q51RWQk/4JrT7xLjiVE0RH4fnhvygf1u/AgAA//8nA+ouhnvhnwAAAABJRU5ErkJggg==)
+
 ```
                                                                                           
                                                                                           
