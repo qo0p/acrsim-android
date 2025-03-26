@@ -676,7 +676,7 @@ TLV-структура состоит из полей:
 
 > см. класс [uz.yt.ofd.android.lib.codec.receipt20.Receipt](app/src/main/java/uz/yt/ofd/android/lib/codec/receipt20/Receipt.java)
 
-### ReceiptItem
+### FullReceipt.ReceiptItem
 
 `ReceiptItem` - TLV-структура которая содержит информацию о товарах/услугах их цен/кол-во и доп. данные
 
@@ -968,13 +968,75 @@ fiscal-drive-service devtool tlv parse --oid-list --file receipt.tlv
 
 `Request` - TLV-структура запроса на отправку файлов
 
+| Поле              |   OID   | Тип           | Описание                                 |
+|-------------------|:-------:|---------------|------------------------------------------|
+| `TAG_TERMINAL_ID` | `8a.01` | `TerminalID ` | Сер. № ФМ                                |
+| `TAG_LOCAL_TIME`  | `8a.02` | `BCDDateTime` | Дата-время ККМ перед отправкой сообщения |
+| `TAG_SENDER_INFO` | `8a.81` | `SenderInfo`  | Информация об отправителе                |
+| `TAG_FILE`        | `8a.8f` | `[]File`      | Отправляемые файлы                       |
+
 > см. класс [uz.yt.ofd.android.lib.codec.message6.Request](app/src/main/java/uz/yt/ofd/android/lib/codec/message6/Request.java)
+
+### SenderInfo
+
+`SenderInfo` - TLV-структура информации об отправителе
+
+| Название      |  Тег   | Тип                                            | Описание                     |
+|---------------|:------:|------------------------------------------------|------------------------------|
+| `TAG_NAME`    | `0x01` | `ASCII-цифры и лат. буквы` (от 0 до 32 байтов) | Название устройства (ПО)     |
+| `TAG_SN`      | `0x02` | `ASCII-цифры и лат. буквы` (от 0 до 64 байтов) | Серийный номер устройства    |
+| `TAG_VERSION` | `0x03` | `ASCII-цифры и лат. буквы` (от 0 до 64 байтов) | Версия кассового ПО/прошивки |
+
+> см. класс [uz.yt.ofd.android.lib.codec.message6.SenderInfo](app/src/main/java/uz/yt/ofd/android/lib/codec/message6/SenderInfo.java)
+
+### File
+
+`File` - TLV-структура файла для отправки
+
+| Поле          |    OID     | Тип                        | Описание                                                                                                                                                                                                                                                            |
+|---------------|:----------:|----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `TAG_TYPE`    | `8a.8f.01` | `byte `                    | Тип файла                                                                                                                                                                                                                                                           |
+| `TAG_VERSION` | `8a.8f.02` | `byte`                     | Версия файла для типов:<br> * `ZReport (0x02)`,`ShortReceipt (0x03)` = `0x02`<br> * `PurchaseReceipt (0x01)`,`AdvanceReceipt (0x04)`,`CreditReceipt (0x05)` = `0x14`                                                                                                |
+| `TAG_HEADER`  | `8a.8f.03` | `[]byte`                   | Заголовок. Для для типов файла:<br> * `ZReport (0x02)` - должно содержать `ZReportFile`<br> * `ShortReceipt (0x03)` - должно содержать `ReceiptFile`<br> * `PurchaseReceipt (0x01)`,`AdvanceReceipt (0x04)`,`CreditReceipt (0x05)` - должно содержать `ReceiptFile` |
+| `TAG_BODY`    | `8a.8f.04` | `[]byte`                   | Тело. Для для типов файла:<br> * `ZReport (0x02)`,`ShortReceipt (0x03)` - пустое<br> * `PurchaseReceipt (0x01)`,`AdvanceReceipt (0x04)`,`CreditReceipt (0x05)` - должно содержать `FullReceiptFile`                                                                 |
+| `TAG_TAG`     | `8a.8f.0f` | `[]byte` (от 0 до 32 байт) | Поле может содержать например, идентификатор файла в файловой системе ККМ, <br>сервер ОФД возвращает это значение в `Message.Response.AckFile[].Tag` (не обязательное поле)                                                                                         |
+
+> см. класс [uz.yt.ofd.android.lib.codec.message6.File](app/src/main/java/uz/yt/ofd/android/lib/codec/message6/File.java)
+> 
+> см. класс [uz.yt.ofd.acrsim.sender.dto.ReceiptSyncItem](app/src/main/java/uz/yt/ofd/acrsim/sender/dto/ReceiptSyncItem.java)
+> 
+> см. класс [uz.yt.ofd.acrsim.sender.dto.ZReportSyncItem](app/src/main/java/uz/yt/ofd/acrsim/sender/dto/ZReportSyncItem.java)
+
 
 ### Response
 
-`Response` - TLV-структура ответа на Request
+`Response` - TLV-структура ответа на `Request`
+
+| Поле              |   OID   | Тип           | Описание                           |
+|-------------------|:-------:|---------------|------------------------------------|
+| `TAG_STATUS_INFO` | `8b.81` | `StatusInfo ` | Информация о статуте принятия      |
+| `TAG_ACK_FILE`    | `8b.8e` | `[]AckFile`   | Ответный файл от сервера `AckFile` |
 
 > см. класс [uz.yt.ofd.android.lib.codec.message6.Response](app/src/main/java/uz/yt/ofd/android/lib/codec/message6/Response.java)
+
+### StatusInfo
+
+`StatusInfo ` - TLV-структура информация о статуте принятия
+
+> см. класс [uz.yt.ofd.android.lib.codec.message6.StatusInfo](app/src/main/java/uz/yt/ofd/android/lib/codec/message6/StatusInfo.java)
+
+### AckFile
+
+`AckFile` - TLV-структура ответного файла от сервера
+
+| Поле         |    OID     | Тип      | Описание                                                                                                                                                                                                                                                 |
+|--------------|:----------:|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `TAG_STATUS` | `8b.8e.01` | `byte `  | Коды статуса принятия файла                                                                                                                                                                                                                              |
+| `TAG_HEADER` | `8b.8e.02` | `byte`   | Если `Message.Response.AckFile.Status` = `Error`, то содержит название trace-файла (в ASCII) если произошла ошибка при обработки файла<br> Если `Message.Response.AckFile.Status` = `Acknowledge`, то содержит идентификатор `AckFile` (не применяется)  |
+| `TAG_BODY`   | `8b.8e.03` | `[]byte` | Если `Message.Response.AckFile.Status` = `Acknowledge`, то содержит `AckFile` для передачи в ФМ                                                                                                                                                          |
+| `TAG_TAG`    | `8b.8e.0f` | `[]byte` | Содержит значение `Message.Request.File[].Tag`                                                                                                                                                                                                           |
+
+> см. класс [uz.yt.ofd.android.lib.codec.message6.AckFile](app/src/main/java/uz/yt/ofd/android/lib/codec/message6/AckFile.java)
 
 ### VerifyFiscalSignQuery
 
@@ -987,6 +1049,10 @@ fiscal-drive-service devtool tlv parse --oid-list --file receipt.tlv
 `SyncStateQuery`- Запрос для синхронизации времени, состояния ФМ с сервером
 
 > см. класс [uz.yt.ofd.acrsim.sender.TCPSender.SyncState()](app/src/main/java/uz/yt/ofd/acrsim/sender/TCPSender.java)
+
+
+
+
 
 ## Описание ACR-SIM
 
