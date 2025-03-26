@@ -964,6 +964,29 @@ fiscal-drive-service devtool tlv parse --oid-list --file receipt.tlv
 
 > см. класс [uz.yt.ofd.android.lib.codec.message6.Message](app/src/main/java/uz/yt/ofd/android/lib/codec/message6/Message.java)
 
+### Request
+
+`Request` - TLV-структура запроса на отправку файлов
+
+> см. класс [uz.yt.ofd.android.lib.codec.message6.Request](app/src/main/java/uz/yt/ofd/android/lib/codec/message6/Request.java)
+
+### Response
+
+`Response` - TLV-структура ответа на Request
+
+> см. класс [uz.yt.ofd.android.lib.codec.message6.Response](app/src/main/java/uz/yt/ofd/android/lib/codec/message6/Response.java)
+
+### VerifyFiscalSignQuery
+
+`VerifyFiscalSignQuery` - Запрос на проверку ФП чека
+
+> см. класс [uz.yt.ofd.acrsim.sender.TCPSender.check()](app/src/main/java/uz/yt/ofd/acrsim/sender/TCPSender.java)
+
+### SyncStateQuery
+
+`SyncStateQuery`- Запрос для синхронизации времени, состояния ФМ с сервером
+
+> см. класс [uz.yt.ofd.acrsim.sender.TCPSender.SyncState()](app/src/main/java/uz/yt/ofd/acrsim/sender/TCPSender.java)
 
 ## Описание ACR-SIM
 
