@@ -817,8 +817,6 @@ https://ofd.soliq.uz/check?t=ZZ000000000000&r=22&c=20211102141307&s=445705250315
 
 Получаем QR-код:
 
-![](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkAQMAAABKLAcXAAAABlBMVEX///8AAABVwtN+AAABjUlEQVR4nMTSvaqrQBAH8BEhaeTYWsVXUNJK8iqnSzuwzSmE3c5XsPNVFFvJvsKm0XbFZgXZuZDkQLybe7zVvdP9YD/mzwz85+JUhD1rlCS9IfSKEHKvCAAdsbFcDB/Lzr5TtfR5aoL30jv8iLo3Qq/yd5jw7//+LE5l17O0/O76VQBRewDg9TPvqxgVHbBRhdYVWh4cwCsmEhvKx6EG9gHJTTti14vsUcfTAR2BrELFwiG7n1yLJ7DMi4X2kW8lFhZHTzSDNLAliID0KKRCR/m5oh1cIdsLR3iKjxFL1UKueKO0zc+UzXpDeIpbw/UedujIl0VgeUrZvc+1GHx2Bk9RHaEjX4q2x4TT896rgtNFmiAU53u+n+SnSgLXF38Qjnj92Vq4xtkOHKFHtWI2ygbtykLXY1PKm9hSY0Cx0NDsCiA+zpONaoOOOIlgFvVXN2hH6JXBbbFf9ePNldhYkg3kQMNfaDIspe6xu78LbD6q51RWQk/4JrT7xLjiVE0RH4fnhvygf1u/AgAA//8nA+ouhnvhnwAAAABJRU5ErkJggg==)
-
 ```
                                                                                           
                                                                                           
@@ -892,6 +890,80 @@ fiscal-drive-service devtool tlv parse --file receipt.tlv
 ```
 fiscal-drive-service devtool tlv parse --oid-list --file receipt.tlv
 ```
+
+## Типы данных протокола MessageV6
+
+### Тип сообщения
+
+Тип сообщения в поле `Message.TLV.Tag`
+
+| Название       |  Тег   | Описание                            |
+|----------------|:------:|-------------------------------------|
+| `TAG_REQUEST`  | `0x8a` | Запрос на отправку файлов           |
+| `TAG_RESPONSE` | `0x8b` | Ответ на запрос                     |
+
+> см. класс [uz.yt.ofd.android.lib.codec.message6.Message](app/src/main/java/uz/yt/ofd/android/lib/codec/message6/Message.java)
+
+### Типы файлов отправляемые ККМ
+
+Типы файлов отправляемые ККМ в поле `Message.Request.File[].Type`
+
+| Название                |  Type  | Описание                                                  |
+|-------------------------|:------:|-----------------------------------------------------------|
+| `PurchaseReceipt`       | `0x01` | `FullReceiptFile`                                         |
+| `ZReport`               | `0x02` | `ZReportFile`                                             |
+| `ShortReceipt`          | `0x03` | `ReceiptFile`                                             |
+| `AdvanceReceipt`        | `0x04` | Файл авансового чека с информацией о товарах/услугах      |
+| `CreditReceipt`         | `0x05` | Файл кредитного чека с информацией о товарах/услугах      |
+| `VerifyFiscalSignQuery` | `0xc8` | Запрос на проверку ФП чека                                |
+| `SyncStateQuery`        | `0xc9` | Запрос для синхронизации времени, состояния ФМ с сервером |
+
+> см. класс [uz.yt.ofd.android.lib.codec.message6.FileType](app/src/main/java/uz/yt/ofd/android/lib/codec/message6/FileType.java)
+
+### Коды статуса принятия сообщения 
+
+Коды состояния возвращаемые сервером в поле `Message.Response.StatusInfo.StatusCode`
+
+| Название            |  Code  | Описание                                                                                                                                                                                                          |
+|---------------------|:------:|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| OK                  | `0x00` | Успешно                                                                                                                                                                                                           |
+| OKNotice            | `0x01` | Успешно, имеется сообщение от сервера в поле `Message.Response.StatusInfo.Notice`                                                                                                                                 |
+| RetrySend           | `0x02` | Следует переотправить сообщение позже (возможно выбрав другой IP-адрес сервера)                                                                                                                                   |
+| NotActive           | `0x0a` | ФМ неактивен (поле `Message.Response.StatusInfo.Notice` содержит текст причины) и сервер не принимает файлы,<br> файлы чеков должны храниться в памяти ККМ и отправлены заного после разблокировки со стороны ОФД |
+| NotFound            | `0x0b` | ФМ (его TerminalID) не найден в БД сервера ОФД                                                                                                                                                                    |
+| BadMessageSyntax    | `0x64` | Ошибка формата сообщения. Запрос содержит ошибки                                                                                                                                                                  |
+| BadMessageStruct    | `0x65` | Ошибка формата сообщения. Структура запроса содержит ошибки                                                                                                                                                       |
+| TooBigMessage       | `0x66` | Очень большое сообщение, уменьшите кол-во файлов для отправки и повторите заново                                                                                                                                  |
+| BadMessageCRC32     | `0x67` | Ошибка контрольной суммы сообщения. Сообщение имеет неправильный CRC32                                                                                                                                            |
+| TooManyFiles        | `0x68` | Слишком много файлов для отправки, уменьшите кол-во файлов и повторите заново                                                                                                                                     |
+
+> см. класс [uz.yt.ofd.android.lib.codec.message6.StatusCode](app/src/main/java/uz/yt/ofd/android/lib/codec/message6/StatusCode.java)
+
+### Коды статуса принятия файла
+
+Коды статуса возвращаемые сервером в поле `Message.Response.AckFile[].Status` для каждого отправленного типа данных клиентом
+
+| Название           | Status  | Описание                                                                                                                     |
+|--------------------|:-------:|------------------------------------------------------------------------------------------------------------------------------|
+| `Acknowledge`      | `0x00`  | Файл успешно обработан и в поле `Message.Response.AckFile[].Body` находится AckFile                                          |
+| `Reject`           | `0x01`  | Файл отказан в принятии оператором ОФД                                                                                       |
+| `Error`            | `0x02`  | Ошибка обработки файла, название trace-файла содержащего детали ошибки находиться в поле `Message.Response.AckFile[].Header` |
+| `UnrecognizedType` | `0x03`  | Передан неправильный тип файла или версия файла                                                                              |                                                                                                               |
+
+> см. класс [uz.yt.ofd.android.lib.codec.message6.AckFileStatus](app/src/main/java/uz/yt/ofd/android/lib/codec/message6/AckFileStatus.java)
+
+### Message
+
+`Message` - Сообщение для/от сервера ОФД.
+
+| Поле       |   offset:size   | Тип               | Описание                                                                         |
+|------------|:---------------:|-------------------|----------------------------------------------------------------------------------|
+| `VERSION`  | `0x0000:0x0001` | `byte`            | Версия = `0x06`                                                                  |
+| `TLV_DATA` | `0x0001:0x????` | `TLV-структура`   | TLV-структура (`Request`,`Response`)                                             |
+| `CRC32`    | `0x????:0x0004` | `CRC32`           | Значение CRC32 для всего сообщения начиная с версии (включительно) до поля CRC32 |
+
+> см. класс [uz.yt.ofd.android.lib.codec.message6.Message](app/src/main/java/uz/yt/ofd/android/lib/codec/message6/Message.java)
+
 
 ## Описание ACR-SIM
 
