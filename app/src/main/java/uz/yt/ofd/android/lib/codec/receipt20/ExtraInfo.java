@@ -56,7 +56,7 @@ public class ExtraInfo extends TLVEncodable {
         writeString(TAG_PHONE_NUMBER, phoneNumber, ReceiptCodec.PHONE_NUMBER_MAX_SIZE, w);
         writeString(TAG_QR_PAYMENT_ID, qrPaymentId, ReceiptCodec.QR_PAYMENT_ID_MAX_SIZE, w);
         if (qrPaymentProvider > 0) {
-            writeShort(TAG_QR_PAYMENT_PROVIDER, qrPaymentProvider, w);
+            writeLong(TAG_QR_PAYMENT_PROVIDER, (long)qrPaymentProvider, w);
         }
         if (cashedOutFromCard > 0) {
             writeLong(TAG_CASHED_OUT_FROM_CARD, cashedOutFromCard, w);
