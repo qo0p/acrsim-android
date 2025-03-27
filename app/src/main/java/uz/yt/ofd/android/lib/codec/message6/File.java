@@ -25,18 +25,21 @@ public class File extends TLVEncodable {
     public static final byte TAG_VERSION = (byte) 0x02;
     public static final byte TAG_HEADER = (byte) 0x03;
     public static final byte TAG_BODY = (byte) 0x04;
+    public static final byte TAG_TAG = (byte) 0x0f;
 
     public static void buildTlvTagDescriptions(TlvTagDescriptions parentTlvTagDescriptions, TlvTagDescriptions.OID oid) {
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_TYPE, "Type"));
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_VERSION, "Version"));
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_HEADER, "Header"));
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_BODY, "Body"));
+        parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_TAG, "Tag"));
     }
 
     private byte type;
     private byte version;
     private byte[] header;
     private byte[] body;
+    private byte[] tag;
 
     public File() {
     }
@@ -98,6 +101,19 @@ public class File extends TLVEncodable {
 
                 });
             }
+            if (tv.getTag() == TAG_TAG) {
+                str.read(tv, new SingleTagReader.Callback() {
+                    @Override
+                    public boolean assign(TV tv) throws Exception {
+                        if (tv.getValue() != null && tv.getValue().length > 32) {
+                            throw new IllegalArgumentException(String.format("tag must be 32 bytes or less"));
+                        }
+                        o.tag = tv.getValue();
+                        return true;
+                    }
+
+                });
+            }
         }
         return o;
     }
@@ -134,11 +150,19 @@ public class File extends TLVEncodable {
         this.body = body;
     }
 
+    public byte[] getTag() {
+        return tag;
+    }
+
+    public void setTag(byte[] tag) {
+        this.tag = tag;
+    }
+
     /**
      * Закодировать в TLV-структуру
      *
      * @param w поток записи
-     * @throws Exception ошибка при кодировании
+     * @throws IOException ошибка при кодировании
      */
     @Override
     public void write(OutputStream w) throws IOException {
@@ -146,6 +170,9 @@ public class File extends TLVEncodable {
         writeByte(TAG_VERSION, version, w);
         writeBytes(TAG_HEADER, header, w);
         writeBytes(TAG_BODY, body, w);
+        if(tag != null && tag.length > 0) {
+            writeBytes(TAG_TAG, tag, 32, w);
+        }
     }
 
 }
