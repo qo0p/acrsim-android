@@ -1059,16 +1059,32 @@ fiscal-drive-service devtool tlv parse --oid-list --file receipt.tlv
 
 `VerifyFiscalSignQuery` - Запрос на проверку ФП чека
 
+| Поле            | offset:size | Тип           | Описание                |
+|-----------------|:-----------:|---------------|-------------------------|
+| `TERMINAL_ID`   | `0x00:0x08` | `TerminalID ` | Серийный номер ФМ       |
+| `RECEIPT_SEQ`   | `0x08:0x08` | `BCD`         | Номер чека              |
+| `TIME`          | `0x10:0x08` | `BCDDateTime` | Время регистрации чека  |
+| `FISCAL_SIGN`   | `0x18:0x06` | `FiscalSign`  | Фискальный признак чека |
+
 > см. класс [uz.yt.ofd.acrsim.sender.TCPSender.check()](app/src/main/java/uz/yt/ofd/acrsim/sender/TCPSender.java)
 
 ### SyncStateQuery
 
 `SyncStateQuery`- Запрос для синхронизации времени, состояния ФМ с сервером
 
+| Поле              | offset:size | Тип         | Описание                                     |
+|-------------------|:-----------:|-------------|----------------------------------------------|
+| `SYNC_CHALLENGE`  | `0x00:0x08` | `[]byte `   | `Challenge` для синхронизации с сервером ОФД |
+
 > см. класс [uz.yt.ofd.acrsim.sender.TCPSender.SyncState()](app/src/main/java/uz/yt/ofd/acrsim/sender/TCPSender.java)
 
 ## ПРИМЕРНЫЙ (УПРОЩЕННЫЙ) АЛГОРИТМ РАБОТЫ ККМ
 
+* __Шаг 0.__ Если ФМ заблокирован обратиться к ОФД, после разблокировки ККМ выполняет следующие шаги:
+    * __Шаг 0.1.__ Запрашивает `Info` из ФМ, считывает значение `Challenge`
+    * __Шаг 0.2.__ Создает файл `Message.Request.File[0]` из `SyncStateQuery`
+    * __Шаг 0.3.__ Отправляет `Message`, и получает `Message.Response` ответное-сообщение от сервера ОФД
+    * __Шаг 0.4.__ Считывает `Message.Response.AckFile[0]`, если `AckFile[0].Status` = `Acknowledge` то ККМ отправляет `AckFile[0].Body` в ФМ иначе выводит ошибку.
 * __Шаг 1.__ ККМ Открывает `ZReport` (если `ZReport` не был открыт)
 * __Шаг 2.__ ККМ ждет ввода информации о чеке
 * __Шаг 3.__ При вводе информации о чеке ККМ выполняет следующие шаги:
