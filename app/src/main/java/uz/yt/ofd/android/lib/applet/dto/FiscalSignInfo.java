@@ -21,14 +21,14 @@ public class FiscalSignInfo extends TLVEncodable {
     public static final byte TAG_RECEIPT_SEQ = (byte) 0x02;
     public static final byte TAG_TIME = (byte) 0x03;
     public static final byte TAG_FISCAL_SIGN = (byte) 0x04;
-    public static final byte TAG_FISCAL_CIPHER_KEY = (byte) 0x0c;
+    public static final byte TAG_CIPHER_KEY = (byte) 0x0c;
 
     public static void buildTlvTagDescriptions(TlvTagDescriptions parentTlvTagDescriptions, TlvTagDescriptions.OID oid) {
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_TERMINAL_ID, "TerminalID"));
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_RECEIPT_SEQ, "ReceiptSeq"));
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_TIME, "Time"));
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_FISCAL_SIGN, "FiscalSign"));
-        parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_FISCAL_CIPHER_KEY, "CipherKey"));
+        parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_CIPHER_KEY, "CipherKey"));
     }
 
     String terminalID;
@@ -52,7 +52,7 @@ public class FiscalSignInfo extends TLVEncodable {
             w.write(TLV.encode(TAG_FISCAL_SIGN, fiscalSign));
         }
         if (cipherKey != null) {
-            w.write(TLV.encode(TAG_FISCAL_CIPHER_KEY, cipherKey));
+            w.write(TLV.encode(TAG_CIPHER_KEY, cipherKey));
         }
     }
 
@@ -105,7 +105,7 @@ public class FiscalSignInfo extends TLVEncodable {
                     }
                 });
             }
-            if (tv.getTag() == TAG_FISCAL_CIPHER_KEY) {
+            if (tv.getTag() == TAG_CIPHER_KEY) {
                 str.read(tv, new SingleTagReader.Callback() {
                     @Override
                     public boolean assign(TV tv) throws Exception {
