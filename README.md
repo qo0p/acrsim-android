@@ -676,7 +676,7 @@ TLV-структура состоит из полей:
 
 > см. класс [uz.yt.ofd.android.lib.codec.receipt20.Receipt](app/src/main/java/uz/yt/ofd/android/lib/codec/receipt20/Receipt.java)
 
-### FullReceipt.ReceiptItem
+### ReceiptItem
 
 `ReceiptItem` - TLV-структура которая содержит информацию о товарах/услугах их цен/кол-во и доп. данные
 
