@@ -760,20 +760,22 @@ TLV-структура состоит из полей:
 
 `TotalBlock` - Структура которая содержит информацию об итоговых суммах и времени чека, передается для регистрации в ФМ.
 
-| Поле             | offset:size | Тип             | Описание                             |
-|------------------|:-----------:|-----------------|--------------------------------------|
-| `ITEMS_HASH`     | `0x00:0x20` | `[]byte`        | Хеш-значение `FullReceipt`           |
-| `RECEIVED_CASH`  | `0x20:0x08` | `BCD`           | Сумма наличности в тийинах           |
-| `RECEIVED_CARD`  | `0x28:0x08` | `BCD`           | Сумма безналичности в тийинах        |
-| `TOTAL_VAT`      | `0x30:0x08` | `BCD`           | Сумма НДС в тийинах                  |
-| `TIME`           | `0x38:0x08` | `BCDDateTime`   | Дата-время чека                      |
-| `TYPE`           | `0x40:0x01` | `byte`          | Тип чека                             |
-| `OPERATION`      | `0x41:0x01` | `byte`          | Тип операции                         |
-| `ITEMS_COUNT`    | `0x42:0x02` | `short`         | Кол-во товаров услуг в `FullReceipt` |
-| `EXTRA`          | `0x44:0x20` | `[]byte`        | Доп. поля  (Не обязательное поле)    |
+| Поле             | offset:size | Тип             | Описание                                |
+|------------------|:-----------:|-----------------|-----------------------------------------|
+| `ITEMS_HASH`     | `0x00:0x20` | `[]byte`        | Хеш-значение<sup>1</sup> `FullReceipt`  |
+| `RECEIVED_CASH`  | `0x20:0x08` | `BCD`           | Сумма наличности в тийинах              |
+| `RECEIVED_CARD`  | `0x28:0x08` | `BCD`           | Сумма безналичности в тийинах           |
+| `TOTAL_VAT`      | `0x30:0x08` | `BCD`           | Сумма НДС в тийинах                     |
+| `TIME`           | `0x38:0x08` | `BCDDateTime`   | Дата-время чека                         |
+| `TYPE`           | `0x40:0x01` | `byte`          | Тип чека                                |
+| `OPERATION`      | `0x41:0x01` | `byte`          | Тип операции                            |
+| `ITEMS_COUNT`    | `0x42:0x02` | `short`         | Кол-во товаров услуг в `FullReceipt`    |
+| `EXTRA`          | `0x44:0x20` | `[]byte`        | Доп. поля  (Не обязательное поле)       |
 
 > см. класс [uz.yt.ofd.android.lib.codec.receipt20.ReceiptCodec](app/src/main/java/uz/yt/ofd/android/lib/codec/receipt20/ReceiptCodec.java)
 
+> <sup>1</sup> Хеш от `FullReceipt` вычисляется  по алг. 2 стандарт УзДСТ 1106:2009 sbox Gost-R-34-11-94-CryptoProParamSet, см. класс [uz.yt.ofd.android.lib.crypto.OzDSt1106Digest](app/src/main/java/uz/yt/ofd/android/lib/crypto/OzDSt1106Digest.java)
+ 
 **Поля чека должны выполнять условия следующего уравнения:**
 
 $$ReceivedCard + ReceivedCash - \sum_{i=1}^{N} Price_i - Discount_i - Other_i \le 10000$$
@@ -789,15 +791,17 @@ $$ReceivedCard, ReceivedCash, Price_i, Discount_i, Other_i \ge 0$$
 
 `FiscalSignInfo` - TLV-структура которая содержит информацию об ФП чеке, возвращается в ответ на регистрацию чека в ФМ.
 
-| Поле                    |   OID   | Тип           | Описание                       |
-|-------------------------|:-------:|---------------|--------------------------------|
-| `TAG_TERMINAL_ID`       | `a3.01` | `TerminalID ` | Серийный номер ФМ              |
-| `TAG_RECEIPT_SEQ`       | `a3.02` | `BCD`         | Номер чека                     |
-| `TAG_TIME`              | `a3.03` | `BCDDateTime` | Время регистрации чека         |
-| `TAG_FISCAL_SIGN`       | `a3.04` | `FiscalSign`  | Фискальный признак чека        |
-| `TAG_FISCAL_CIPHER_KEY` | `a3.0c` | `[]byte`      | Ключ шифрования `FullReceipt`  |
+| Поле               |   OID   | Тип           | Описание                                  |
+|--------------------|:-------:|---------------|-------------------------------------------|
+| `TAG_TERMINAL_ID`  | `a3.01` | `TerminalID ` | Серийный номер ФМ                         |
+| `TAG_RECEIPT_SEQ`  | `a3.02` | `BCD`         | Номер чека                                |
+| `TAG_TIME`         | `a3.03` | `BCDDateTime` | Время регистрации чека                    |
+| `TAG_FISCAL_SIGN`  | `a3.04` | `FiscalSign`  | Фискальный признак чека                   |
+| `TAG_CIPHER_KEY`   | `a3.0c` | `[]byte`      | Ключ шифрования<sup>1</sup> `FullReceipt` |
 
 > см. класс [uz.yt.ofd.android.lib.applet.dto.FiscalSignInfo](app/src/main/java/uz/yt/ofd/android/lib/applet/dto/FiscalSignInfo.java)
+
+> <sup>1</sup> Ключем шифрования нужно зашифровать `FullReceipt` по алг. ГОСТ 28147 sbox Gost-R-34-11-94-CryptoProParamSet, см. класс [uz.yt.ofd.android.lib.crypto.GOST28147Engine](app/src/main/java/uz/yt/ofd/android/lib/crypto/GOST28147Engine.java)
 
 ### QRCode
 `QRCode` - QR-код содержит ссылку на чек с параметрами `TerminalID`, `ReceiptSeq`, `Time` и `FiscalSign`.
