@@ -22,7 +22,7 @@ public class ExtraInfo extends TLVEncodable {
     public static final byte TAG_CASHED_OUT_FROM_CARD = (byte) 0x07;
     public static final byte TAG_PPTID = (byte) 0x08;
     public static final byte TAG_CARD_TYPE = (byte) 0x09;
-    public static final byte TAG_CARD_NUMBER = (byte) 0x0a;
+    public static final byte TAG_CARD_NUMBER = (byte) 0x0b;
     public static final byte TAG_OTHER = (byte) 0x0a;
 
     public static void buildTlvTagDescriptions(TlvTagDescriptions parentTlvTagDescriptions, TlvTagDescriptions.OID oid) {

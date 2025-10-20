@@ -34,6 +34,14 @@ public class ReceiptUtils {
         return res.toString();
     }
 
+    private static String generateNumber(int len) {
+        StringBuilder res = new StringBuilder();
+        for (int i = 0; i < len; i++) {
+            res.append(random.nextInt(10));
+        }
+        return res.toString();
+    }
+
     private static String generateFakePhoneNumber() {
         StringBuilder res = new StringBuilder();
         res.append("998");
@@ -184,6 +192,7 @@ public class ReceiptUtils {
         extraInfo.setCarNumber(generateFakeCarNumber());
         extraInfo.setPhoneNumber(generateFakePhoneNumber());
         extraInfo.setCardType((byte) (Math.abs(random.nextInt()) % 3));
+        extraInfo.setCardNumber("8600********" + generateNumber(4));
         extraInfo.setCashedOutFromCard((Math.abs(random.nextLong()) % 10000) + 10000);
         extraInfo.setQrPaymentId(UUID.randomUUID().toString());
         extraInfo.setQrPaymentProvider((short) (Math.abs(random.nextInt()) % 100));
