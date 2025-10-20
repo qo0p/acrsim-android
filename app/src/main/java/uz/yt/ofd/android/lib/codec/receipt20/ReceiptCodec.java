@@ -34,6 +34,7 @@ public class ReceiptCodec {
     public static int CAR_NUMBER_MAX_SIZE = 8;
     public static int QR_PAYMENT_ID_MAX_SIZE = 36;
     public static int PPTID_MAX_SIZE = 16;
+    public static int CARD_NUMBER_MAX_SIZE = 16;
     public static int OTHER_MAX_SIZE = 32;
 
     public static long BCD8_MAX_LIMIT = 9999999999999999l;

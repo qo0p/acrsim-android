@@ -22,6 +22,7 @@ public class ExtraInfo extends TLVEncodable {
     public static final byte TAG_CASHED_OUT_FROM_CARD = (byte) 0x07;
     public static final byte TAG_PPTID = (byte) 0x08;
     public static final byte TAG_CARD_TYPE = (byte) 0x09;
+    public static final byte TAG_CARD_NUMBER = (byte) 0x0a;
     public static final byte TAG_OTHER = (byte) 0x0a;
 
     public static void buildTlvTagDescriptions(TlvTagDescriptions parentTlvTagDescriptions, TlvTagDescriptions.OID oid) {
@@ -34,6 +35,7 @@ public class ExtraInfo extends TLVEncodable {
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_CASHED_OUT_FROM_CARD, "CashedOutFromCard"));
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_PPTID, "PPTID"));
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_CARD_TYPE, "CardType"));
+        parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_CARD_NUMBER, "CardNumber"));
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_OTHER, "Other"));
     }
 
@@ -46,6 +48,7 @@ public class ExtraInfo extends TLVEncodable {
     private long cashedOutFromCard;
     private String pptid;
     private byte cardType;
+    private String cardNumber;
     private String other;
 
     @Override
@@ -63,13 +66,14 @@ public class ExtraInfo extends TLVEncodable {
         }
         writeString(TAG_PPTID, pptid, ReceiptCodec.PPTID_MAX_SIZE, w);
         writeByte(TAG_CARD_TYPE, cardType, w);
+        writeString(TAG_CARD_NUMBER, cardNumber, ReceiptCodec.CARD_NUMBER_MAX_SIZE, w);
         writeString(TAG_OTHER, other, ReceiptCodec.OTHER_MAX_SIZE, w);
     }
 
     public ExtraInfo() {
     }
 
-    public ExtraInfo(String tin, String pinfl, String carNumber, String phoneNumber, String qrPaymentId, short qrPaymentProvider, long cashedOutFromCard, String pptid, byte cardType, String other) {
+    public ExtraInfo(String tin, String pinfl, String carNumber, String phoneNumber, String qrPaymentId, short qrPaymentProvider, long cashedOutFromCard, String pptid, byte cardType, String cardNumber, String other) {
         this.tin = tin;
         this.pinfl = pinfl;
         this.carNumber = carNumber;
@@ -79,6 +83,7 @@ public class ExtraInfo extends TLVEncodable {
         this.cashedOutFromCard = cashedOutFromCard;
         this.pptid = pptid;
         this.cardType = cardType;
+        this.cardNumber = cardNumber;
         this.other = other;
     }
 
@@ -152,6 +157,14 @@ public class ExtraInfo extends TLVEncodable {
 
     public void setCardType(byte cardType) {
         this.cardType = cardType;
+    }
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
     }
 
     public String getOther() {
