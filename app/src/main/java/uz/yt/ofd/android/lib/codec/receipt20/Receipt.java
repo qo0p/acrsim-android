@@ -21,6 +21,7 @@ public class Receipt extends TLVEncodable {
     public static final byte TAG_TIME = (byte) 0x03;
     public static final byte TAG_TYPE = (byte) 0x04;
     public static final byte TAG_OPERATION = (byte) 0x05;
+    public static final byte TAG_PAYMENT_TYPE = (byte) 0x06;
     public static final byte TAG_REFUND_INFO = (byte) 0x8d;
     public static final byte TAG_LOCATION = (byte) 0x8e;
     public static final byte TAG_ITEMS = (byte) 0x8c;
@@ -32,6 +33,7 @@ public class Receipt extends TLVEncodable {
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_TIME, "Time"));
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_TYPE, "Type"));
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_OPERATION, "Operation"));
+        parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_PAYMENT_TYPE, "PaymentType"));
 
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_REFUND_INFO, "RefundInfo"));
         RefundInfo.buildTlvTagDescriptions(parentTlvTagDescriptions, oid.append(TAG_REFUND_INFO, "RefundInfo"));
@@ -58,6 +60,8 @@ public class Receipt extends TLVEncodable {
     private ReceiptType type;
 
     private OperationType operation;
+
+    private PaymentType paymentType;
 
     private RefundInfo refundInfo;
 
@@ -121,6 +125,7 @@ public class Receipt extends TLVEncodable {
         writeDate(TAG_TIME, time, w);
         writeByte(TAG_TYPE, type.getValue(), w);
         writeByte(TAG_OPERATION, operation.getValue(), w);
+        writeByte(TAG_PAYMENT_TYPE, paymentType.getValue(), w);
         if (refundInfo != null) {
             w.write(TLV.encode(TAG_REFUND_INFO, refundInfo.encode()));
         }
@@ -135,13 +140,14 @@ public class Receipt extends TLVEncodable {
         }
     }
 
-    public Receipt(LinkedList<ReceiptItem> items, long receivedCash, long receivedCard, Date time, ReceiptType type, OperationType operation, RefundInfo refundInfo, Location location, ExtraInfo extraInfo) {
+    public Receipt(LinkedList<ReceiptItem> items, long receivedCash, long receivedCard, Date time, ReceiptType type, OperationType operation, PaymentType paymentType, RefundInfo refundInfo, Location location, ExtraInfo extraInfo) {
         this.items = items;
         this.receivedCash = receivedCash;
         this.receivedCard = receivedCard;
         this.time = time;
         this.type = type;
         this.operation = operation;
+        this.paymentType = paymentType;
         this.refundInfo = refundInfo;
         this.location = location;
         this.extraInfo = extraInfo;
@@ -193,6 +199,14 @@ public class Receipt extends TLVEncodable {
 
     public void setOperation(OperationType operation) {
         this.operation = operation;
+    }
+
+    public PaymentType getPaymentType() {
+        return paymentType;
+    }
+
+    public void setPaymentType(PaymentType paymentType) {
+        this.paymentType = paymentType;
     }
 
     public RefundInfo getRefundInfo() {

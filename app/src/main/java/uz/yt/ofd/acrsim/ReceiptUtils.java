@@ -9,6 +9,7 @@ import uz.yt.ofd.android.lib.codec.receipt20.CommissionInfo;
 import uz.yt.ofd.android.lib.codec.receipt20.ExtraInfo;
 import uz.yt.ofd.android.lib.codec.receipt20.Location;
 import uz.yt.ofd.android.lib.codec.receipt20.OperationType;
+import uz.yt.ofd.android.lib.codec.receipt20.PaymentType;
 import uz.yt.ofd.android.lib.codec.receipt20.Receipt;
 import uz.yt.ofd.android.lib.codec.receipt20.ReceiptItem;
 import uz.yt.ofd.android.lib.codec.receipt20.ReceiptType;
@@ -206,7 +207,7 @@ public class ReceiptUtils {
             String fiscalSign = "000000000000";
             refundInfo = new RefundInfo(terminalID, receiptSeq, dateTime, fiscalSign);
         }
-        Receipt receipt = new Receipt(items, totalCash, totalCard, time, type, operation, refundInfo, location, extraInfo);
+        Receipt receipt = new Receipt(items, totalCash, totalCard, time, type, operation, PaymentType.Mixed, refundInfo, location, extraInfo);
         return receipt;
     }
 }
