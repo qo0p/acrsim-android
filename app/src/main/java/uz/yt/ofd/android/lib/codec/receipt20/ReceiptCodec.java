@@ -29,6 +29,10 @@ public class ReceiptCodec {
     public static int TIN_MAX_SIZE = 9;
     public static int PINFL_MAX_SIZE = 14;
     public static int PACKAGE_CODE_MAX_SIZE = 20;
+    public static int RECIPE_ID_MAX_SIZE = 32;
+    public static int PASSPORT_NUMBER_MAX_SIZE = 12;
+    public static int FLIGHT_NUMBER_MAX_SIZE = 14;
+    public static int SEAT_NUMBER_MAX_SIZE = 12;
 
     public static int PHONE_NUMBER_MAX_SIZE = 13;
     public static int CAR_NUMBER_MAX_SIZE = 8;

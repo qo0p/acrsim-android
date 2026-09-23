@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import uz.yt.ofd.android.lib.codec.receipt20.CommissionInfo;
 import uz.yt.ofd.android.lib.codec.receipt20.ExtraInfo;
+import uz.yt.ofd.android.lib.codec.receipt20.FlightPassengerInfo;
 import uz.yt.ofd.android.lib.codec.receipt20.Location;
 import uz.yt.ofd.android.lib.codec.receipt20.OperationType;
 import uz.yt.ofd.android.lib.codec.receipt20.PaymentType;
@@ -124,7 +125,11 @@ public class ReceiptUtils {
             }
         }
         byte ownerType = (byte) (Math.abs(random.nextLong()) % 3);
-        return new ReceiptItem(name.toString(), barcode.toString(), label.toString(), spic, units, pacode.toString(), ownerType, price, (short) vatPersent, vat, amount, discount, other, (comtin == null && compinfl == null) ? null : new CommissionInfo(comtin, compinfl));
+        StringBuilder recipeID = new StringBuilder();
+        for (int i = 0; i < 16; i++) {
+            recipeID.append(Integer.toHexString((int) (Math.abs(random.nextLong()) % 16)).toUpperCase());
+        }
+        return new ReceiptItem(name.toString(), barcode.toString(), label.toString(), spic, units, pacode.toString(), ownerType, recipeID.toString(), price, (short) vatPersent, vat, amount, discount, other, (comtin == null && compinfl == null) ? null : new CommissionInfo(comtin, compinfl));
     }
 
     public static Receipt generateReceipt(long target, Date time, ReceiptType type, OperationType operation) {
@@ -207,7 +212,27 @@ public class ReceiptUtils {
             String fiscalSign = "000000000000";
             refundInfo = new RefundInfo(terminalID, receiptSeq, dateTime, fiscalSign);
         }
-        Receipt receipt = new Receipt(items, totalCash, totalCard, time, type, operation, PaymentType.Mixed, refundInfo, location, extraInfo);
+
+        PaymentType paymentType;
+        if (totalCash > 0 && totalCard > 0) {
+            paymentType = PaymentType.Mixed;
+        } else if (totalCard > 0) {
+            paymentType = PaymentType.Card;
+        } else {
+            paymentType = PaymentType.Cash;
+        }
+
+        FlightPassengerInfo flightPassengerInfo = null;
+        if ((Math.abs(random.nextInt()) % 5) == 0) {
+            flightPassengerInfo = new FlightPassengerInfo(
+                    "AA" + String.format("%07d", Math.abs(random.nextInt()) % 10000000),
+                    generateFakePINFL(),
+                    "HY-" + String.format("%04d", Math.abs(random.nextInt()) % 10000),
+                    String.format("%d%c", (Math.abs(random.nextInt()) % 40) + 1, (char) ('A' + Math.abs(random.nextInt()) % 6))
+            );
+        }
+
+        Receipt receipt = new Receipt(items, totalCash, totalCard, time, type, operation, paymentType, refundInfo, location, extraInfo, flightPassengerInfo);
         return receipt;
     }
 }

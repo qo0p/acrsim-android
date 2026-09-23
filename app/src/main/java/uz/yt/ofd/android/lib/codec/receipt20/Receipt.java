@@ -26,6 +26,7 @@ public class Receipt extends TLVEncodable {
     public static final byte TAG_LOCATION = (byte) 0x8e;
     public static final byte TAG_ITEMS = (byte) 0x8c;
     public static final byte TAG_EXTRA_INFO = (byte) 0x8f;
+    public static final byte TAG_FLIGHT_PASSENGER_INFO = (byte) 0x90;
 
     public static void buildTlvTagDescriptions(TlvTagDescriptions parentTlvTagDescriptions, TlvTagDescriptions.OID oid) {
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_RECEIVED_CASH, "ReceivedCash"));
@@ -39,13 +40,16 @@ public class Receipt extends TLVEncodable {
         RefundInfo.buildTlvTagDescriptions(parentTlvTagDescriptions, oid.append(TAG_REFUND_INFO, "RefundInfo"));
 
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_LOCATION, "Location"));
-        RefundInfo.buildTlvTagDescriptions(parentTlvTagDescriptions, oid.append(TAG_LOCATION, "Location"));
+        Location.buildTlvTagDescriptions(parentTlvTagDescriptions, oid.append(TAG_LOCATION, "Location"));
 
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_ITEMS, "Items"));
-        RefundInfo.buildTlvTagDescriptions(parentTlvTagDescriptions, oid.append(TAG_ITEMS, "Items"));
+        ReceiptItem.buildTlvTagDescriptions(parentTlvTagDescriptions, oid.append(TAG_ITEMS, "Items"));
 
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_EXTRA_INFO, "ExtraInfo"));
-        RefundInfo.buildTlvTagDescriptions(parentTlvTagDescriptions, oid.append(TAG_EXTRA_INFO, "ExtraInfo"));
+        ExtraInfo.buildTlvTagDescriptions(parentTlvTagDescriptions, oid.append(TAG_EXTRA_INFO, "ExtraInfo"));
+
+        parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_FLIGHT_PASSENGER_INFO, "FlightPassengerInfo"));
+        FlightPassengerInfo.buildTlvTagDescriptions(parentTlvTagDescriptions, oid.append(TAG_FLIGHT_PASSENGER_INFO, "FlightPassengerInfo"));
     }
 
 
@@ -68,6 +72,8 @@ public class Receipt extends TLVEncodable {
     private Location location;
 
     private ExtraInfo extraInfo;
+
+    private FlightPassengerInfo flightPassengerInfo;
 
     @Override
     public void write(OutputStream w) throws IOException {
@@ -123,9 +129,11 @@ public class Receipt extends TLVEncodable {
         writeLong(TAG_RECEIVED_CASH, receivedCash, w);
         writeLong(TAG_RECEIVED_CARD, receivedCard, w);
         writeDate(TAG_TIME, time, w);
-        writeByte(TAG_TYPE, type.getValue(), w);
-        writeByte(TAG_OPERATION, operation.getValue(), w);
-        writeByte(TAG_PAYMENT_TYPE, paymentType.getValue(), w);
+        writeLong(TAG_TYPE, (long) type.getValue(), w);
+        writeLong(TAG_OPERATION, (long) operation.getValue(), w);
+        if (paymentType != null) {
+            writeLong(TAG_PAYMENT_TYPE, (long) paymentType.getValue(), w);
+        }
         if (refundInfo != null) {
             w.write(TLV.encode(TAG_REFUND_INFO, refundInfo.encode()));
         }
@@ -138,9 +146,12 @@ public class Receipt extends TLVEncodable {
         if (extraInfo != null) {
             w.write(TLV.encode(TAG_EXTRA_INFO, extraInfo.encode()));
         }
+        if (flightPassengerInfo != null) {
+            w.write(TLV.encode(TAG_FLIGHT_PASSENGER_INFO, flightPassengerInfo.encode()));
+        }
     }
 
-    public Receipt(LinkedList<ReceiptItem> items, long receivedCash, long receivedCard, Date time, ReceiptType type, OperationType operation, PaymentType paymentType, RefundInfo refundInfo, Location location, ExtraInfo extraInfo) {
+    public Receipt(LinkedList<ReceiptItem> items, long receivedCash, long receivedCard, Date time, ReceiptType type, OperationType operation, PaymentType paymentType, RefundInfo refundInfo, Location location, ExtraInfo extraInfo, FlightPassengerInfo flightPassengerInfo) {
         this.items = items;
         this.receivedCash = receivedCash;
         this.receivedCard = receivedCard;
@@ -151,6 +162,7 @@ public class Receipt extends TLVEncodable {
         this.refundInfo = refundInfo;
         this.location = location;
         this.extraInfo = extraInfo;
+        this.flightPassengerInfo = flightPassengerInfo;
     }
 
     public LinkedList<ReceiptItem> getItems() {
@@ -231,6 +243,14 @@ public class Receipt extends TLVEncodable {
 
     public void setExtraInfo(ExtraInfo extraInfo) {
         this.extraInfo = extraInfo;
+    }
+
+    public FlightPassengerInfo getFlightPassengerInfo() {
+        return flightPassengerInfo;
+    }
+
+    public void setFlightPassengerInfo(FlightPassengerInfo flightPassengerInfo) {
+        this.flightPassengerInfo = flightPassengerInfo;
     }
 
     public long calcTotalVAT() {

@@ -369,6 +369,17 @@ _Другие коды возвращаются OC смарт-карты. См._
 
 > см. класс [uz.yt.ofd.android.lib.codec.receipt20.OperationType](app/src/main/java/uz/yt/ofd/android/lib/codec/receipt20/OperationType.java)
 
+### Форма оплаты
+
+| Форма оплаты | Значение |
+|--------------|:--------:|
+| Наличные     |  `0x01`  |
+| Безналичные  |  `0x02`  |
+| По QR-коду   |  `0x03`  |
+| Смешанная    |  `0x04`  |
+
+> см. класс [uz.yt.ofd.android.lib.codec.receipt20.PaymentType](app/src/main/java/uz/yt/ofd/android/lib/codec/receipt20/PaymentType.java)
+
 ### NAME
 
 `NAME` - Название товара/услуги. Символы поля `NAME` чека в кодировке преобразуются по таблицы преобразования
@@ -707,18 +718,19 @@ TLV-структура состоит из полей:
 
 `FullReceipt` - TLV-структура которая содержит всю информацию о чеке (товары/услуги их цены/кол-во и доп. данные)
 
-| Поле                |   OID   | Тип                      | Описание                                                    |
-|---------------------|:-------:|--------------------------|-------------------------------------------------------------|
-| `TAG_RECEIVED_CASH` | `8d.01` | `BCD` (от 1 до 8 байтов) | Наличная сумма полученная от продажи в тийинах              |
-| `TAG_RECEIVED_CARD` | `8d.02` | `BCD` (от 1 до 8 байтов) | Безналичная сумма полученная от продажи в тийинах           |
-| `TAG_TIME`          | `8d.03` | `BCDDateTime`            | Дата-время чека                                             |
-| `TAG_TYPE`          | `8d.04` | `byte`                   | Тип чека                                                    |
-| `TAG_OPERATION`     | `8d.05` | `byte`                   | Тип операции                                                |
-| `TAG_PAYMENT_TYPE`  | `8d.06` | `byte`                   | Форма оплаты                                                |
-| `TAG_REFUND_INFO`   | `8d.8d` | `RefundInfo`             | Информацию об отозванном чеке (заполняется в чеке возврата) |
-| `TAG_LOCATION`      | `8d.8e` | `Location`               | Геолокация                                                  |
-| `TAG_ITEMS`         | `8d.8c` | `[]ReceiptItem`          | Информация о товарах/услугах                                |
-| `TAG_EXTRA_INFO`    | `8d.8f` | `ExtraInfo`              | Доп. Информация                                             |
+| Поле                        |   OID   | Тип                      | Описание                                                    |
+|-----------------------------|:-------:|--------------------------|-------------------------------------------------------------|
+| `TAG_RECEIVED_CASH`         | `8d.01` | `BCD` (от 1 до 8 байтов) | Наличная сумма полученная от продажи в тийинах              |
+| `TAG_RECEIVED_CARD`         | `8d.02` | `BCD` (от 1 до 8 байтов) | Безналичная сумма полученная от продажи в тийинах           |
+| `TAG_TIME`                  | `8d.03` | `BCDDateTime`            | Дата-время чека                                             |
+| `TAG_TYPE`                  | `8d.04` | `BCD` (от 1 до 8 байтов) | Тип чека                                                    |
+| `TAG_OPERATION`             | `8d.05` | `BCD` (от 1 до 8 байтов) | Тип операции                                                |
+| `TAG_PAYMENT_TYPE`          | `8d.06` | `BCD` (от 1 до 8 байтов) | Форма оплаты                                                |
+| `TAG_REFUND_INFO`           | `8d.8d` | `RefundInfo`             | Информацию об отозванном чеке (заполняется в чеке возврата) |
+| `TAG_LOCATION`              | `8d.8e` | `Location`               | Геолокация                                                  |
+| `TAG_ITEMS`                 | `8d.8c` | `[]ReceiptItem`          | Информация о товарах/услугах                                |
+| `TAG_EXTRA_INFO`            | `8d.8f` | `ExtraInfo`              | Доп. Информация                                             |
+| `TAG_FLIGHT_PASSENGER_INFO` | `8d.90` | `FlightPassengerInfo`    | Информация о пассажире полета                               |
 
 > см. класс [uz.yt.ofd.android.lib.codec.receipt20.Receipt](app/src/main/java/uz/yt/ofd/android/lib/codec/receipt20/Receipt.java)
 
@@ -740,7 +752,8 @@ TLV-структура состоит из полей:
 | `TAG_DISCOUNT`        |  `8d.8c.0a`  | `BCD` (от 1 до 8 байтов)            | Цена скидки в тийинах                                                                                    |
 | `TAG_OTHER`           |  `8d.8c.0b`  | `BCD` (от 1 до 8 байтов)            | Цена прочей скидки (оплата по страховки и др.) в тийинах                                                 |
 | `TAG_PACKAGE_CODE`    |  `8d.8c.11`  | `ASCII-цифры` (от 1 до 20 байтов)   | Код упаковки                                                                                             |
-| `TAG_OWNER_TYPE`      |  `8d.8c.12`  | `byte`                              | Тип владельца продукта/услуги (см. справочник)                                                           |
+| `TAG_OWNER_TYPE`      |  `8d.8c.12`  | `BCD` (от 1 до 8 байтов)            | Тип владельца продукта/услуги (см. справочник)                                                           |
+| `TAG_RECIPE_ID`       |  `8d.8c.13`  | `ASCII` (от 1 до 32 байтов), опционально | Идентификатор рецепта (если пусто — тег не кодируется)                                                    |
 | `TAG_COMMISSION_INFO` |  `8d.8c.81`  | `CommissionInfo`                    | Признак комиссионного товара или услуги                                                                  |
 
 > <sup>1</sup> Поля `Amount` передается с учетом единицы измерения, то есть умножается на 1000<br>
@@ -789,6 +802,19 @@ TLV-структура состоит из полей:
 | `TAG_OTHER`                | `0x0a` | `ASCII` (32 байта)                     | Прочие данные                                                                        |
 
 > см. класс [uz.yt.ofd.android.lib.codec.receipt20.ExtraInfo](app/src/main/java/uz/yt/ofd/android/lib/codec/receipt20/ExtraInfo.java)
+
+### FlightPassengerInfo
+
+`FlightPassengerInfo` - TLV-структура которая содержит информацию о пассажире полета
+
+| Поле                 |  Тег   | Тип                       | Описание        |
+|----------------------|:------:|---------------------------|-----------------|
+| `TAG_PASSPORT_NUMBER`| `0x01` | `ASCII` (до 12 байтов)    | №. Паспорта     |
+| `TAG_PINFL`          | `0x02` | `ASCII-цифры` (14 байтов) | ПИНФЛ           |
+| `TAG_FLIGHT_NUMBER`  | `0x03` | `ASCII` (до 14 байтов)    | №. Рейса        |
+| `TAG_SEAT_NUMBER`    | `0x04` | `ASCII` (до 12 байтов)    | №. сидения      |
+
+> см. класс [uz.yt.ofd.android.lib.codec.receipt20.FlightPassengerInfo](app/src/main/java/uz/yt/ofd/android/lib/codec/receipt20/FlightPassengerInfo.java)
 
 ### RefundInfo
 

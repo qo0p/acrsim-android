@@ -29,6 +29,7 @@ public class ReceiptItem extends TLVEncodable {
     public static final byte TAG_OTHER = (byte) 0x0b;
     public static final byte TAG_PACKAGE_CODE = (byte) 0x11;
     public static final byte TAG_OWNER_TYPE = (byte) 0x12;
+    public static final byte TAG_RECIPE_ID = (byte) 0x13;
     public static final byte TAG_COMMISSION_INFO = (byte) 0x81;
 
     public static void buildTlvTagDescriptions(TlvTagDescriptions parentTlvTagDescriptions, TlvTagDescriptions.OID oid) {
@@ -45,6 +46,7 @@ public class ReceiptItem extends TLVEncodable {
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_OTHER, "Other"));
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_PACKAGE_CODE, "PackageCode"));
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_OWNER_TYPE, "OwnerType"));
+        parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_RECIPE_ID, "RecipeID"));
         parentTlvTagDescriptions.addTagDesciption(oid.append(TAG_COMMISSION_INFO, "CommissionInfo"));
         CommissionInfo.buildTlvTagDescriptions(parentTlvTagDescriptions, oid.append(TAG_COMMISSION_INFO, "CommissionInfo"));
     }
@@ -62,6 +64,8 @@ public class ReceiptItem extends TLVEncodable {
     private String packageCode;
 
     private Byte ownerType;
+
+    private String recipeID;
 
     private long price;
 
@@ -126,13 +130,18 @@ public class ReceiptItem extends TLVEncodable {
             writeLong(TAG_OTHER, other, w);
         }
         writeString(TAG_PACKAGE_CODE, packageCode, ReceiptCodec.PACKAGE_CODE_MAX_SIZE, w);
-        writeByte(TAG_OWNER_TYPE, ownerType, w);
+        if (ownerType != null) {
+            writeLong(TAG_OWNER_TYPE, ownerType.longValue(), w);
+        }
+        if (!isEmpty(recipeID)) {
+            writeString(TAG_RECIPE_ID, recipeID, ReceiptCodec.RECIPE_ID_MAX_SIZE, w);
+        }
         if (commissionInfo != null) {
             w.write(TLV.encode(TAG_COMMISSION_INFO, commissionInfo.encode()));
         }
     }
 
-    public ReceiptItem(String name, String barcode, String label, String spic, long units, String packageCode, Byte ownerType, long price, short vatPercent, long vat, long amount, long discount, long other, CommissionInfo commissionInfo) {
+    public ReceiptItem(String name, String barcode, String label, String spic, long units, String packageCode, Byte ownerType, String recipeID, long price, short vatPercent, long vat, long amount, long discount, long other, CommissionInfo commissionInfo) {
         this.name = name;
         this.barcode = barcode;
         this.label = label;
@@ -140,6 +149,7 @@ public class ReceiptItem extends TLVEncodable {
         this.units = units;
         this.packageCode = packageCode;
         this.ownerType = ownerType;
+        this.recipeID = recipeID;
         this.price = price;
         this.vatPercent = vatPercent;
         this.vat = vat;
@@ -203,6 +213,14 @@ public class ReceiptItem extends TLVEncodable {
 
     public void setOwnerType(Byte ownerType) {
         this.ownerType = ownerType;
+    }
+
+    public String getRecipeID() {
+        return recipeID;
+    }
+
+    public void setRecipeID(String recipeID) {
+        this.recipeID = recipeID;
     }
 
     public long getPrice() {
