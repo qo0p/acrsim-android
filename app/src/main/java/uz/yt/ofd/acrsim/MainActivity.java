@@ -809,7 +809,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         });
-
     }
 
     void doSync(APDUIO apduio, String terminalId, List<SyncItem> syncItems) throws Exception {
