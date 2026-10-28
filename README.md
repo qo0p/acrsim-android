@@ -1120,14 +1120,13 @@ fiscal-drive-service devtool tlv parse --oid-list --file receipt.tlv
 
 ### VerifyFiscalSignQuery
 
-`VerifyFiscalSignQuery` - Запрос на проверку ФП чека
+`VerifyFiscalSignQuery` - Запрос на проверку ФП чека. Содержимое `File.Header`. Серийный номер ФМ передается в `Request.TerminalID`, а не в заголовке файла.
 
 | Поле            | offset:size | Тип           | Описание                |
 |-----------------|:-----------:|---------------|-------------------------|
-| `TERMINAL_ID`   | `0x00:0x08` | `TerminalID ` | Серийный номер ФМ       |
-| `RECEIPT_SEQ`   | `0x08:0x08` | `BCD`         | Номер чека              |
-| `TIME`          | `0x10:0x08` | `BCDDateTime` | Время регистрации чека  |
-| `FISCAL_SIGN`   | `0x18:0x06` | `FiscalSign`  | Фискальный признак чека |
+| `RECEIPT_SEQ`   | `0x00:0x08` | `BCD8`        | Номер чека              |
+| `TIME`          | `0x08:0x08` | `BCDDateTime` | Время регистрации чека  |
+| `FISCAL_SIGN`   | `0x10:0x06` | `FiscalSign`  | Фискальный признак чека |
 
 > см. класс [uz.yt.ofd.acrsim.sender.TCPSender.check()](app/src/main/java/uz/yt/ofd/acrsim/sender/TCPSender.java)
 
